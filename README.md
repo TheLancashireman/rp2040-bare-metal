@@ -7,10 +7,6 @@ and linker do a lot of the work.
 
 ## License, disclaimer etc.
 
-The ArduinoISP is licensed under the BSD license: see http://www.opensource.org/licenses/bsd-license.php
-
-For the rest of the code:
-
 Copyright David Haworth
 
 This file is part of rp2040-bare-metal.
