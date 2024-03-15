@@ -1,9 +1,26 @@
-/* rp2040-pio.h - RP2040 PIO register interface
+/* rp2040-pio.h - header file for RP2040 PIO register interface
  *
  * (c) David Haworth
+ *
+ *  This file is part of rp2040-bare-metal.
+ *
+ *  rp2040-bare-metal is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  rp2040-bare-metal is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with rp2040-bare-metal.  If not, see <http://www.gnu.org/licenses/>.
 */
 #ifndef RP2040_PIO_H
 #define RP2040_PIO_H	1
+
+#include "rp2040-types.h"
 
 typedef struct rp2040_pio_s rp2040_pio_t;
 typedef struct rp2040_piosm_s rp2040_piosm_t;

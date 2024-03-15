@@ -20,7 +20,7 @@
 #ifndef RP2040_SIO_H
 #define RP2040_SIO_H		1
 
-#include <rp2040-types.h>
+#include "rp2040-types.h"
 
 /* RP2040 SIO - single-cycle I/O block
  *

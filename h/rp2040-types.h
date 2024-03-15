@@ -1,4 +1,4 @@
-/* rp2040-types.h - RP2040 fixed-witdh types
+/* rp2040-types.h - header file for RP2040 fixed-width types
  *
  * (c) David Haworth
  *
