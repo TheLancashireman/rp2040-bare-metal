@@ -45,10 +45,12 @@ typedef volatile u64_t reg64_t;
 #include "rp2040.h"
 #include "rp2040-adc.h"
 #include "rp2040-dma.h"
+#include "rp2040-pio.h"
 
 static int test_sysinfo(void);
 static int test_adc(void);
 static int test_dma(void);
+static int test_pio(void);
 static int test_address(volatile void *p, u32_t v, char *name);
 
 int main(int argc, char **argv)
@@ -56,6 +58,9 @@ int main(int argc, char **argv)
 	int nfail = 0;
 
 	nfail += test_sysinfo();
+	nfail += test_adc();
+	nfail += test_dma();
+	nfail += test_pio();
 
 	if ( nfail == 0 )
 		printf("Pass\n");
@@ -144,6 +149,55 @@ static int test_dma(void)
 	 * can be inferred.
 	*/
 	nfail += test_address(&rp2040_dma.dbg[1].dbg_ctdreq,			0x50000840, "rp2040_dma.ch1_dbg_ctdreq");
+	return nfail;
+}
+
+static int test_pio(void)
+{
+	int nfail = 0;
+	nfail += test_address(&rp2040_pio0.ctrl,			0x50200000, "rp2040_pio0.ctrl");
+	nfail += test_address(&rp2040_pio0.fstat,			0x50200004, "rp2040_pio0.fstat");
+	nfail += test_address(&rp2040_pio0.fdebug,			0x50200008, "rp2040_pio0.fdebug");
+	nfail += test_address(&rp2040_pio0.flevel,			0x5020000c, "rp2040_pio0.flevel");
+
+	/* For array members it's sufficient to test the first element and the (first register of the)
+	 * second element. The rest can be inferred
+	*/
+	nfail += test_address(&rp2040_pio0.txf[0],			0x50200010, "rp2040_pio0.txf[0]");
+	nfail += test_address(&rp2040_pio0.txf[1],			0x50200014, "rp2040_pio0.txf[1]");
+	nfail += test_address(&rp2040_pio0.rxf[0],			0x50200020, "rp2040_pio0.rxf[0]");
+	nfail += test_address(&rp2040_pio0.rxf[1],			0x50200024, "rp2040_pio0.rxf[1]");
+
+	nfail += test_address(&rp2040_pio0.irqf,			0x50200030, "rp2040_pio0.irqf");
+	nfail += test_address(&rp2040_pio0.irq_force,		0x50200034, "rp2040_pio0.irq_force");
+	nfail += test_address(&rp2040_pio0.ip_syn_byp,		0x50200038, "rp2040_pio0.ip_syn_byp");
+	nfail += test_address(&rp2040_pio0.dbg_padout,		0x5020003c, "rp2040_pio0.dbg_padout");
+	nfail += test_address(&rp2040_pio0.dbg_padoe,		0x50200040, "rp2040_pio0.dbg_padoe");
+	nfail += test_address(&rp2040_pio0.dbg_cfginfo,		0x50200044, "rp2040_pio0.dbg_cfginfo");
+
+	nfail += test_address(&rp2040_pio0.instr_mem[0],	0x50200048, "rp2040_pio0.instr_mem[0]");
+	nfail += test_address(&rp2040_pio0.instr_mem[1],	0x5020004c, "rp2040_pio0.instr_mem[1]");
+
+	nfail += test_address(&rp2040_pio0.sm[0].clkdiv,	0x502000c8, "rp2040_pio0.sm0_clkdiv");
+	nfail += test_address(&rp2040_pio0.sm[0].execctrl,	0x502000cc, "rp2040_pio0.sm0_execctrl");
+	nfail += test_address(&rp2040_pio0.sm[0].shiftctrl,	0x502000d0, "rp2040_pio0.sm0_shiftctrl");
+	nfail += test_address(&rp2040_pio0.sm[0].addr,		0x502000d4, "rp2040_pio0.sm0_addr");
+	nfail += test_address(&rp2040_pio0.sm[0].instr,		0x502000d8, "rp2040_pio0.sm0_instr");
+	nfail += test_address(&rp2040_pio0.sm[0].pinctrl,	0x502000dc, "rp2040_pio0.sm0_pinctrl");
+
+	nfail += test_address(&rp2040_pio0.sm[1].clkdiv,	0x502000e0, "rp2040_pio0.sm1_clkdiv");
+
+	nfail += test_address(&rp2040_pio0.intr,			0x50200128, "rp2040_pio0.intr");
+
+	nfail += test_address(&rp2040_pio0.irq[0].inte,		0x5020012c, "rp2040_pio0.irq0_inte");
+	nfail += test_address(&rp2040_pio0.irq[0].intf,		0x50200130, "rp2040_pio0.irq0_intf");
+	nfail += test_address(&rp2040_pio0.irq[0].ints,		0x50200134, "rp2040_pio0.irq0_ints");
+	nfail += test_address(&rp2040_pio0.irq[1].inte,		0x50200138, "rp2040_pio0.irq1_inte");
+
+	/* It's sufficient to test the first register of pio1 to make sure the base address is correct.
+	 * All the rest of the registers in pio1 can be inferred.
+	*/
+	nfail += test_address(&rp2040_pio1.ctrl,			0x50300000, "rp2040_pio1.ctrl");
 	return nfail;
 }
 

@@ -34,7 +34,7 @@ typedef struct rp2040_pioirq_s rp2040_pioirq_t;
 struct rp2040_piosm_s
 {
 	reg32_t clkdiv;			/* 0x0c8	Clock divider */
-	reg32_t execctrl		/* 0x0cc	Execution/behavioural settings */
+	reg32_t execctrl;		/* 0x0cc	Execution/behavioural settings */
 	reg32_t shiftctrl;		/* 0x0d0	Shift register control settings */
 	reg32_t addr;			/* 0x0d4	Current instruction address */
 	reg32_t instr;			/* 0x0d8	Current instruction */
@@ -45,6 +45,8 @@ struct rp2040_piosm_s
  * Each PIO has two interrupt requests. Each interrupt request has three IRQ registers.
  * The register sets for the IRQs are at offsets 0x12c and 0x138.
  * The offsets given here are for IRQ0. For IRQ1 add 0x00c
+ *
+ * NOTE: There is no gap where irqf1 should be, so the rp2040_intcs_t structure can't be used here.
 */
 struct rp2040_pioirq_s
 {
@@ -73,7 +75,16 @@ struct rp2040_pio_s
 	rp2040_pioirq_t irq[4];	/* 0x12c	Interrupt staus and control */
 };
 
-static const rp2040_pio0 = (rp2040_pio_t *)0x50200000;
-static const rp2040_pio1 = (rp2040_pio_t *)0x50300000;
+#define PIO0_BASE			0x50200000
+#define rp2040_pio0			(((rp2040_pio_t *)(PIO0_BASE+RP2040_OFFSET_REG))[0])
+#define rp2040_pio0_xor		(((rp2040_pio_t *)(PIO0_BASE+RP2040_OFFSET_XOR))[0])
+#define rp2040_pio0_w1s		(((rp2040_pio_t *)(PIO0_BASE+RP2040_OFFSET_W1S))[0])
+#define rp2040_pio0_w1c		(((rp2040_pio_t *)(PIO0_BASE+RP2040_OFFSET_W1C))[0])
+
+#define PIO1_BASE	0x50300000
+#define rp2040_pio1			(((rp2040_pio_t *)(PIO1_BASE+RP2040_OFFSET_REG))[0])
+#define rp2040_pio1_xor		(((rp2040_pio_t *)(PIO1_BASE+RP2040_OFFSET_XOR))[0])
+#define rp2040_pio1_w1s		(((rp2040_pio_t *)(PIO1_BASE+RP2040_OFFSET_W1S))[0])
+#define rp2040_pio1_w1c		(((rp2040_pio_t *)(PIO1_BASE+RP2040_OFFSET_W1C))[0])
 
 #endif
