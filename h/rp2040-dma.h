@@ -49,16 +49,6 @@ struct rp2040_dmac_s
 	reg32_t	al3_read_addr_trig;		/* 0x3c		Alias for read_addr; also trigger */
 };
 
-/* DMA interrupts
-*/
-struct rp2040_dmairq_s
-{
-	reg32_t intr;			/* 0x00		Interrupt status (raw) (only in irq0 structure) */
-	reg32_t inte;			/* 0x04		Interrupt enables */
-	reg32_t intf;			/* 0x08		Interrupt force */
-	reg32_t ints;			/* 0x0c		Interrupt status (masked) */
-};
-
 /* DMA debug
 */
 struct rp2040_dmadbg_s
@@ -73,9 +63,9 @@ struct rp2040_dmadbg_s
 struct rp2040_dma_s
 {
 	rp2040_dmac_t ch[16];		/* 0x000	Channels. Only 12 present (see n_channels) */
-	rp2040_dmairq_t irq[2];		/* 0x400	IRQ control and status */
+	rp2040_intcs_t intcs[2];	/* 0x400	IRQ control and status. intr only present in intcs[0] */
 	reg32_t timer[4];			/* 0x420 	Pacing timers */
-	reg32_t multi_ch_trig;		/* 0x430	Multi-channel trigger */
+	reg32_t multi_chan_trig;	/* 0x430	Multi-channel trigger */
 	reg32_t	sniff_ctrl;			/* 0x434	Sniffer control */
 	reg32_t	sniff_data;			/* 0x438	Sniffer data */
 	reg32_t gap1;				/* 0x43c	*/
@@ -86,6 +76,10 @@ struct rp2040_dma_s
 	rp2040_dmadbg_t dbg[16];	/* 0x800	Channel debug counters */
 };
 
-static const rp2040_dma = (rp2040_dma *)0x50000000;
+#define DMA_BASE				0x50000000
+#define rp2040_dma				(((rp2040_dma_t *)(DMA_BASE+RP2040_OFFSET_REG))[0])
+#define rp2040_dma_xor			(((rp2040_dma_t *)(DMA_BASE+RP2040_OFFSET_XOR))[0])
+#define rp2040_dma_w1s			(((rp2040_dma_t *)(DMA_BASE+RP2040_OFFSET_W1S))[0])
+#define rp2040_dma_w1c			(((rp2040_dma_t *)(DMA_BASE+RP2040_OFFSET_W1C))[0])
 
 #endif

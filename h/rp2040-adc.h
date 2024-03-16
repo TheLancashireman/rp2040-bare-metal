@@ -21,23 +21,25 @@
 #define RP2040_ADC_H		1
 
 #include "rp2040-types.h"
+#include "rp2040.h"
 
 typedef struct rp2040_adc_s rp2040_adc_t;
 
 struct rp2040_adc_s
 {
-	reg32_t cs;		/* 0x00	Control and status */
-	reg32_t result;	/* 0x04	Result of most recent conversion */
-	reg32_t fcs;	/* 0x08	FIFO control and status */
-	reg32_t fifo;	/* 0x0c	FIFO */
-	reg32_t div;	/* 0x10	Clock divider */
-	reg32_t intr;	/* 0x14 Raw interrupt status */
-	reg32_t inte;	/* 0x18 Interrupt enable */
-	reg32_t intf;	/* 0x1c Interrupt force */
-	reg32_t ints;	/* 0x20 Interrupt status after mask and force */
+	reg32_t cs;				/* 0x00	Control and status */
+	reg32_t result;			/* 0x04	Result of most recent conversion */
+	reg32_t fcs;			/* 0x08	FIFO control and status */
+	reg32_t fifo;			/* 0x0c	FIFO */
+	reg32_t div;			/* 0x10	Clock divider */
+	rp2040_intcs_t intcs;	/* 0x14	Interrupt control and status */
 };
 
-static const rp2040_adc = (rp2040_adc_t *)0x4004c000;
+#define ADC_BASE			0x4004c000
+#define rp2040_adc			(((rp2040_adc_t *)(ADC_BASE+RP2040_OFFSET_REG))[0])
+#define rp2040_adc_xor		(((rp2040_adc_t *)(ADC_BASE+RP2040_OFFSET_XOR))[0])
+#define rp2040_adc_w1s		(((rp2040_adc_t *)(ADC_BASE+RP2040_OFFSET_W1S))[0])
+#define rp2040_adc_w1c		(((rp2040_adc_t *)(ADC_BASE+RP2040_OFFSET_W1C))[0])
 
 /* CS register
 */

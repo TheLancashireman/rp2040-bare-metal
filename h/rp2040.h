@@ -48,4 +48,18 @@ struct rp2040_sysinfo_s
 #define RP2040_PART			0x0ffff000
 #define RP2040_REVISION		0xf0000000
 
+/* Some peripherals have a set of four registers to control their interrupts.
+ * If they are in the same order we can use this struct.
+*/
+typedef struct rp2040_intcs_s rp2040_intcs_t;
+
+struct rp2040_intcs_s
+{
+	reg32_t intr;	/* 0x00 Raw interrupt status */
+	reg32_t inte;	/* 0x04 Interrupt enable */
+	reg32_t intf;	/* 0x08 Interrupt force */
+	reg32_t ints;	/* 0x0c Interrupt status after mask and force */
+};
+
+
 #endif
