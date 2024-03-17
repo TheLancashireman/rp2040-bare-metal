@@ -51,6 +51,7 @@ typedef volatile u64_t reg64_t;
 #include "rp2040-resets.h"
 #include "rp2040-sio.h"
 #include "rp2040-timer.h"
+#include "rp2040-uart.h"
 
 static int test_sysinfo(void);
 static int test_adc(void);
@@ -61,6 +62,7 @@ static int test_pio(void);
 static int test_resets(void);
 static int test_sio(void);
 static int test_timer(void);
+static int test_uart(void);
 static int test_address(volatile void *p, u32_t v, char *name);
 
 int main(int argc, char **argv)
@@ -76,6 +78,7 @@ int main(int argc, char **argv)
 	nfail += test_resets();
 	nfail += test_sio();
 	nfail += test_timer();
+	nfail += test_uart();
 
 	if ( nfail == 0 )
 		printf("Pass\n");
@@ -408,6 +411,59 @@ static int test_timer(void)
 	nfail += test_address(&rp2040_timer.intcs.inte,		0x40054038, "rp2040_timer.intcs.inte");
 	nfail += test_address(&rp2040_timer.intcs.intf,		0x4005403c, "rp2040_timer.intcs.intf");
 	nfail += test_address(&rp2040_timer.intcs.ints,		0x40054040, "rp2040_timer.intcs.ints");
+	return nfail;
+}
+
+static int test_uart(void)
+{
+	int nfail = 0;
+	nfail += test_address(&rp2040_uart0.dr,				0x40034000, "rp2040_uart0.dr");
+	nfail += test_address(&rp2040_uart0.rsr,			0x40034004, "rp2040_uart0.rsr");
+	nfail += test_address(&rp2040_uart0.fr,				0x40034018, "rp2040_uart0.fr");
+	nfail += test_address(&rp2040_uart0.ilpr,			0x40034020, "rp2040_uart0.ilpr");
+	nfail += test_address(&rp2040_uart0.ibrd,			0x40034024, "rp2040_uart0.ibrd");
+	nfail += test_address(&rp2040_uart0.fbrd,			0x40034028, "rp2040_uart0.fbrd");
+	nfail += test_address(&rp2040_uart0.lcr_h,			0x4003402c, "rp2040_uart0.lcr_h");
+	nfail += test_address(&rp2040_uart0.cr,				0x40034030, "rp2040_uart0.cr");
+	nfail += test_address(&rp2040_uart0.ifls,			0x40034034, "rp2040_uart0.ifls");
+	nfail += test_address(&rp2040_uart0.imsc,			0x40034038, "rp2040_uart0.imsc");
+	nfail += test_address(&rp2040_uart0.ris,			0x4003403c, "rp2040_uart0.ris");
+	nfail += test_address(&rp2040_uart0.mis,			0x40034040, "rp2040_uart0.mis");
+	nfail += test_address(&rp2040_uart0.icr,			0x40034044, "rp2040_uart0.icr");
+	nfail += test_address(&rp2040_uart0.dmacr,			0x40034048, "rp2040_uart0.dmacr");
+
+	nfail += test_address(&rp2040_uart0.id[0],			0x40034fe0, "rp2040_uart0.id[0]");
+	nfail += test_address(&rp2040_uart0.id[1],			0x40034fe4, "rp2040_uart0.id[1]");
+	nfail += test_address(&rp2040_uart0.id[2],			0x40034fe8, "rp2040_uart0.id[2]");
+	nfail += test_address(&rp2040_uart0.id[3],			0x40034fec, "rp2040_uart0.id[3]");
+	nfail += test_address(&rp2040_uart0.cellid[0],		0x40034ff0, "rp2040_uart0.cellid[0]");
+	nfail += test_address(&rp2040_uart0.cellid[1],		0x40034ff4, "rp2040_uart0.cellid[1]");
+	nfail += test_address(&rp2040_uart0.cellid[2],		0x40034ff8, "rp2040_uart0.cellid[2]");
+	nfail += test_address(&rp2040_uart0.cellid[3],		0x40034ffc, "rp2040_uart0.cellid[3]");
+
+	nfail += test_address(&rp2040_uart1.dr,				0x40038000, "rp2040_uart1.dr");
+	nfail += test_address(&rp2040_uart1.rsr,			0x40038004, "rp2040_uart1.rsr");
+	nfail += test_address(&rp2040_uart1.fr,				0x40038018, "rp2040_uart1.fr");
+	nfail += test_address(&rp2040_uart1.ilpr,			0x40038020, "rp2040_uart1.ilpr");
+	nfail += test_address(&rp2040_uart1.ibrd,			0x40038024, "rp2040_uart1.ibrd");
+	nfail += test_address(&rp2040_uart1.fbrd,			0x40038028, "rp2040_uart1.fbrd");
+	nfail += test_address(&rp2040_uart1.lcr_h,			0x4003802c, "rp2040_uart1.lcr_h");
+	nfail += test_address(&rp2040_uart1.cr,				0x40038030, "rp2040_uart1.cr");
+	nfail += test_address(&rp2040_uart1.ifls,			0x40038034, "rp2040_uart1.ifls");
+	nfail += test_address(&rp2040_uart1.imsc,			0x40038038, "rp2040_uart1.imsc");
+	nfail += test_address(&rp2040_uart1.ris,			0x4003803c, "rp2040_uart1.ris");
+	nfail += test_address(&rp2040_uart1.mis,			0x40038040, "rp2040_uart1.mis");
+	nfail += test_address(&rp2040_uart1.icr,			0x40038044, "rp2040_uart1.icr");
+	nfail += test_address(&rp2040_uart1.dmacr,			0x40038048, "rp2040_uart1.dmacr");
+
+	nfail += test_address(&rp2040_uart1.id[0],			0x40038fe0, "rp2040_uart1.id[0]");
+	nfail += test_address(&rp2040_uart1.id[1],			0x40038fe4, "rp2040_uart1.id[1]");
+	nfail += test_address(&rp2040_uart1.id[2],			0x40038fe8, "rp2040_uart1.id[2]");
+	nfail += test_address(&rp2040_uart1.id[3],			0x40038fec, "rp2040_uart1.id[3]");
+	nfail += test_address(&rp2040_uart1.cellid[0],		0x40038ff0, "rp2040_uart1.cellid[0]");
+	nfail += test_address(&rp2040_uart1.cellid[1],		0x40038ff4, "rp2040_uart1.cellid[1]");
+	nfail += test_address(&rp2040_uart1.cellid[2],		0x40038ff8, "rp2040_uart1.cellid[2]");
+	nfail += test_address(&rp2040_uart1.cellid[3],		0x40038ffc, "rp2040_uart1.cellid[3]");
 	return nfail;
 }
 
