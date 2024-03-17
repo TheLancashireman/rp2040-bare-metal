@@ -1,4 +1,4 @@
-/* dv-rp2040-clocks.c
+/* rp2040-clocks.c - header file for RP2040 clocks, oscillators and PLLs
  *
  * (c) David Haworth
  *

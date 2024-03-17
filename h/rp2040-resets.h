@@ -2,20 +2,20 @@
  *
  * (c) David Haworth
  *
- *  This file is part of davros.
+ *  This file is part of rp2040-bare-metal.
  *
- *  davros is free software: you can redistribute it and/or modify
+ *  rp2040-bare-metal is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  davros is distributed in the hope that it will be useful,
+ *  rp2040-bare-metal is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with davros.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with rp2040-bare-metal.  If not, see <http://www.gnu.org/licenses/>.
 */
 #ifndef RP2040_RESETS_H
 #define RP2040_RESETS_H		1
@@ -23,17 +23,17 @@
 #include "rp2040-types.h"
 #include "rp2040.h"
 
+typedef struct rp2040_resets_s rp2040_resets_t;
+
 /* The resets registers control the power to the peripherals.
  * A peripheral whose reset bit is 1 is held in reset.
 */
-typedef struct rp2040_resets_s rp2040_resets_t;
-
 struct rp2040_resets_s
 {
 	reg32_t	reset;
 	reg32_t	wdsel;
 	reg32_t	done;
-} dv_rp2040_resets_t;
+};
 
 #define RESETS_BASE			0x4000c000
 #define rp2040_resets		(((rp2040_resets_t *)(RESETS_BASE+RP2040_OFFSET_REG))[0])
