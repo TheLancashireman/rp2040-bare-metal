@@ -44,6 +44,7 @@ typedef volatile u64_t reg64_t;
 
 #include "rp2040.h"
 #include "rp2040-adc.h"
+#include "rp2040-clocks.h"
 #include "rp2040-dma.h"
 #include "rp2040-pio.h"
 #include "rp2040-resets.h"
@@ -51,6 +52,7 @@ typedef volatile u64_t reg64_t;
 
 static int test_sysinfo(void);
 static int test_adc(void);
+static int test_clocks(void);
 static int test_dma(void);
 static int test_pio(void);
 static int test_resets(void);
@@ -63,6 +65,7 @@ int main(int argc, char **argv)
 
 	nfail += test_sysinfo();
 	nfail += test_adc();
+	nfail += test_clocks();
 	nfail += test_dma();
 	nfail += test_pio();
 	nfail += test_resets();
@@ -264,11 +267,63 @@ static int test_sio(void)
 
 	/* No need to test the all the registers in interp1.
 	*/
-	nfail += test_address(&rp2040_sio.interp[1].accum0,	0xd00000c0, "rp2040_sio.interp[1].accum0");
+	nfail += test_address(&rp2040_sio.interp[1].accum0,		0xd00000c0, "rp2040_sio.interp[1].accum0");
 
-	nfail += test_address(&rp2040_sio.spinlock[0],		0xd0000100, "rp2040_sio.spinlock[0]");
-	nfail += test_address(&rp2040_sio.spinlock[1],		0xd0000104, "rp2040_sio.spinlock[1]");
-	nfail += test_address(&rp2040_sio.spinlock[31],		0xd000017c, "rp2040_sio.spinlock[31]");
+	nfail += test_address(&rp2040_sio.spinlock[0],			0xd0000100, "rp2040_sio.spinlock[0]");
+	nfail += test_address(&rp2040_sio.spinlock[1],			0xd0000104, "rp2040_sio.spinlock[1]");
+	nfail += test_address(&rp2040_sio.spinlock[31],			0xd000017c, "rp2040_sio.spinlock[31]");
+	return nfail;
+}
+
+static int test_clocks(void)
+{
+	int nfail = 0;
+	nfail += test_address(&rp2040_clocks.gpout[0].ctrl,		0x40008000, "rp2040_clocks.gpout[0].ctrl");
+	nfail += test_address(&rp2040_clocks.gpout[0].div,		0x40008004, "rp2040_clocks.gpout[0].div");
+	nfail += test_address(&rp2040_clocks.gpout[0].selected,	0x40008008, "rp2040_clocks.gpout[0].selected");
+	nfail += test_address(&rp2040_clocks.gpout[1].ctrl,		0x4000800c, "rp2040_clocks.gpout[1].ctrl");
+	nfail += test_address(&rp2040_clocks.ref.ctrl,			0x40008030, "rp2040_clocks.ref.ctrl");
+	nfail += test_address(&rp2040_clocks.sys.ctrl,			0x4000803c, "rp2040_clocks.sys.ctrl");
+	nfail += test_address(&rp2040_clocks.peri.ctrl,			0x40008048, "rp2040_clocks.peri.ctrl");
+	nfail += test_address(&rp2040_clocks.usb.ctrl,			0x40008054, "rp2040_clocks.usb.ctrl");
+	nfail += test_address(&rp2040_clocks.adc.ctrl,			0x40008060, "rp2040_clocks.adc.ctrl");
+	nfail += test_address(&rp2040_clocks.rtc.ctrl,			0x4000806c, "rp2040_clocks.rtc.ctrl");
+	nfail += test_address(&rp2040_clocks.sys_resus_ctrl,	0x40008078, "rp2040_clocks.sys_resus_ctrl");
+	nfail += test_address(&rp2040_clocks.sys_resus_status,	0x4000807c, "rp2040_clocks.sys_resus_status");
+	nfail += test_address(&rp2040_clocks.fc0_ref_khz,		0x40008080, "rp2040_clocks.fc0_ref_khz");
+	nfail += test_address(&rp2040_clocks.fc0_min_khz,		0x40008084, "rp2040_clocks.fc0_min_khz");
+	nfail += test_address(&rp2040_clocks.fc0_max_khz,		0x40008088, "rp2040_clocks.fc0_max_khz");
+	nfail += test_address(&rp2040_clocks.fc0_delay,			0x4000808c, "rp2040_clocks.fc0_delay");
+	nfail += test_address(&rp2040_clocks.fc0_interval,		0x40008090, "rp2040_clocks.fc0_interval");
+	nfail += test_address(&rp2040_clocks.fc0_src,			0x40008094, "rp2040_clocks.fc0_src");
+	nfail += test_address(&rp2040_clocks.fc0_status,		0x40008098, "rp2040_clocks.fc0_status");
+	nfail += test_address(&rp2040_clocks.fc0_result,		0x4000809c, "rp2040_clocks.fc0_result");
+	nfail += test_address(&rp2040_clocks.wake_en[0],		0x400080a0, "rp2040_clocks.wake_en[0]");
+	nfail += test_address(&rp2040_clocks.wake_en[1],		0x400080a4, "rp2040_clocks.wake_en[1]");
+	nfail += test_address(&rp2040_clocks.sleep_en[0],		0x400080a8, "rp2040_clocks.sleep_en[0]");
+	nfail += test_address(&rp2040_clocks.sleep_en[1],		0x400080ac, "rp2040_clocks.sleep_en[1]");
+	nfail += test_address(&rp2040_clocks.enabled[0],		0x400080b0, "rp2040_clocks.enabled[0]");
+	nfail += test_address(&rp2040_clocks.enabled[1],		0x400080b4, "rp2040_clocks.enabled[1]");
+	nfail += test_address(&rp2040_clocks.intcs.intr,		0x400080b8, "rp2040_clocks.intcs.intr");
+	nfail += test_address(&rp2040_clocks.intcs.inte,		0x400080bc, "rp2040_clocks.intcs.inte");
+	nfail += test_address(&rp2040_clocks.intcs.intf,		0x400080c0, "rp2040_clocks.intcs.intf");
+	nfail += test_address(&rp2040_clocks.intcs.ints,		0x400080c4, "rp2040_clocks.intcs.ints");
+
+	nfail += test_address(&rp2040_xosc.ctrl,				0x40024000, "rp2040_xosc.ctrl");
+	nfail += test_address(&rp2040_xosc.status,				0x40024004, "rp2040_xosc.status");
+	nfail += test_address(&rp2040_xosc.dormant,				0x40024008, "rp2040_xosc.dormant");
+	nfail += test_address(&rp2040_xosc.startup,				0x4002400c, "rp2040_xosc.startup");
+	nfail += test_address(&rp2040_xosc.count,				0x4002401c, "rp2040_xosc.count");
+
+	nfail += test_address(&rp2040_pll.cs,					0x40028000, "rp2040_pll.cs");
+	nfail += test_address(&rp2040_pll.pwr,					0x40028004, "rp2040_pll.pwr");
+	nfail += test_address(&rp2040_pll.fbdiv_int,			0x40028008, "rp2040_pll.fbdiv_int");
+	nfail += test_address(&rp2040_pll.prim,					0x4002800c, "rp2040_pll.prim");
+
+	nfail += test_address(&rp2040_usbpll.cs,				0x4002c000, "rp2040_usbpll.cs");
+	nfail += test_address(&rp2040_usbpll.pwr,				0x4002c004, "rp2040_usbpll.pwr");
+	nfail += test_address(&rp2040_usbpll.fbdiv_int,			0x4002c008, "rp2040_usbpll.fbdiv_int");
+	nfail += test_address(&rp2040_usbpll.prim,				0x4002c00c, "rp2040_usbpll.prim");
 	return nfail;
 }
 
