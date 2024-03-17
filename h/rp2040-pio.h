@@ -21,6 +21,7 @@
 #define RP2040_PIO_H	1
 
 #include "rp2040-types.h"
+#include "rp2040.h"
 
 typedef struct rp2040_pio_s rp2040_pio_t;
 typedef struct rp2040_piosm_s rp2040_piosm_t;

@@ -46,11 +46,15 @@ typedef volatile u64_t reg64_t;
 #include "rp2040-adc.h"
 #include "rp2040-dma.h"
 #include "rp2040-pio.h"
+#include "rp2040-resets.h"
+#include "rp2040-sio.h"
 
 static int test_sysinfo(void);
 static int test_adc(void);
 static int test_dma(void);
 static int test_pio(void);
+static int test_resets(void);
+static int test_sio(void);
 static int test_address(volatile void *p, u32_t v, char *name);
 
 int main(int argc, char **argv)
@@ -61,6 +65,8 @@ int main(int argc, char **argv)
 	nfail += test_adc();
 	nfail += test_dma();
 	nfail += test_pio();
+	nfail += test_resets();
+	nfail += test_sio();
 
 	if ( nfail == 0 )
 		printf("Pass\n");
@@ -198,6 +204,71 @@ static int test_pio(void)
 	 * All the rest of the registers in pio1 can be inferred.
 	*/
 	nfail += test_address(&rp2040_pio1.ctrl,			0x50300000, "rp2040_pio1.ctrl");
+	return nfail;
+}
+
+static int test_resets(void)
+{
+	int nfail = 0;
+	nfail += test_address(&rp2040_resets.reset,			0x4000c000, "rp2040_resets.reset");
+	nfail += test_address(&rp2040_resets.wdsel,			0x4000c004, "rp2040_resets.wdsel");
+	nfail += test_address(&rp2040_resets.done,			0x4000c008, "rp2040_resets.done");
+	return nfail;
+}
+
+static int test_sio(void)
+{
+	int nfail = 0;
+	nfail += test_address(&rp2040_sio.cpuid,				0xd0000000, "rp2040_sio.cpuid");
+	nfail += test_address(&rp2040_sio.gpio_in,				0xd0000004, "rp2040_sio.gpio_in");
+	nfail += test_address(&rp2040_sio.gpio_hi_in,			0xd0000008, "rp2040_sio.gpio_hi_in");
+
+	nfail += test_address(&rp2040_sio.gpio_out.val,			0xd0000010, "rp2040_sio.gpio_out");
+	nfail += test_address(&rp2040_sio.gpio_out.w1s,			0xd0000014, "rp2040_sio.gpio_out_set");
+	nfail += test_address(&rp2040_sio.gpio_out.w1c,			0xd0000018, "rp2040_sio.gpio_out_clr");
+	nfail += test_address(&rp2040_sio.gpio_out.xor,			0xd000001c, "rp2040_sio.gpio_out_xor");
+
+	/* No need to test the atomic access ports for gpio_oe, gpio_hi_out and gpio_hi_oe.
+	*/
+	nfail += test_address(&rp2040_sio.gpio_oe.val,			0xd0000020, "rp2040_sio.gpio_oe");
+	nfail += test_address(&rp2040_sio.gpio_hi_out.val,		0xd0000030, "rp2040_sio.gpio_hi_out");
+	nfail += test_address(&rp2040_sio.gpio_hi_oe.val,		0xd0000040, "rp2040_sio.gpio_hi_oe");
+
+	nfail += test_address(&rp2040_sio.fifo_st,				0xd0000050, "rp2040_sio.fifo_st");
+	nfail += test_address(&rp2040_sio.fifo_wr,				0xd0000054, "rp2040_sio.fifo_wr");
+	nfail += test_address(&rp2040_sio.fifo_rd,				0xd0000058, "rp2040_sio.fifo_rd");
+	nfail += test_address(&rp2040_sio.spinlock_st,			0xd000005c, "rp2040_sio.spinlock_st");
+	nfail += test_address(&rp2040_sio.div_udividend,		0xd0000060, "rp2040_sio.div_udividend");
+	nfail += test_address(&rp2040_sio.div_udivisor,			0xd0000064, "rp2040_sio.div_udivisor");
+	nfail += test_address(&rp2040_sio.div_sdividend,		0xd0000068, "rp2040_sio.div_sdividend");
+	nfail += test_address(&rp2040_sio.div_sdivisor,			0xd000006c, "rp2040_sio.div_sdivisor");
+	nfail += test_address(&rp2040_sio.div_quotient,			0xd0000070, "rp2040_sio.div_quotient");
+	nfail += test_address(&rp2040_sio.div_remainder,		0xd0000074, "rp2040_sio.div_remainder");
+	nfail += test_address(&rp2040_sio.div_csr,				0xd0000078, "rp2040_sio.div_csr");
+	nfail += test_address(&rp2040_sio.interp[0].accum0,		0xd0000080, "rp2040_sio.interp[0].accum0");
+	nfail += test_address(&rp2040_sio.interp[0].accum1,		0xd0000084, "rp2040_sio.interp[0].accum1");
+	nfail += test_address(&rp2040_sio.interp[0].base0,		0xd0000088, "rp2040_sio.interp[0].base0");
+	nfail += test_address(&rp2040_sio.interp[0].base1,		0xd000008c, "rp2040_sio.interp[0].base1");
+	nfail += test_address(&rp2040_sio.interp[0].base2,		0xd0000090, "rp2040_sio.interp[0].base2");
+	nfail += test_address(&rp2040_sio.interp[0].pop_lane0,	0xd0000094, "rp2040_sio.interp[0].pop_lane0");
+	nfail += test_address(&rp2040_sio.interp[0].pop_lane1,	0xd0000098, "rp2040_sio.interp[0].pop_lane1");
+	nfail += test_address(&rp2040_sio.interp[0].pop_full,	0xd000009c, "rp2040_sio.interp[0].pop_full");
+	nfail += test_address(&rp2040_sio.interp[0].peek_lane0,	0xd00000a0, "rp2040_sio.interp[0].peek_lane0");
+	nfail += test_address(&rp2040_sio.interp[0].peek_lane1,	0xd00000a4, "rp2040_sio.interp[0].peek_lane1");
+	nfail += test_address(&rp2040_sio.interp[0].peek_full,	0xd00000a8, "rp2040_sio.interp[0].peek_full");
+	nfail += test_address(&rp2040_sio.interp[0].ctrl_lane0,	0xd00000ac, "rp2040_sio.interp[0].ctrl_lane0");
+	nfail += test_address(&rp2040_sio.interp[0].ctrl_lane1,	0xd00000b0, "rp2040_sio.interp[0].ctrl_lane1");
+	nfail += test_address(&rp2040_sio.interp[0].accum0_add,	0xd00000b4, "rp2040_sio.interp[0].accum0_add");
+	nfail += test_address(&rp2040_sio.interp[0].accum1_add,	0xd00000b8, "rp2040_sio.interp[0].accum1_add");
+	nfail += test_address(&rp2040_sio.interp[0].base_1and0,	0xd00000bc, "rp2040_sio.interp[0].base_1and0");
+
+	/* No need to test the all the registers in interp1.
+	*/
+	nfail += test_address(&rp2040_sio.interp[1].accum0,	0xd00000c0, "rp2040_sio.interp[1].accum0");
+
+	nfail += test_address(&rp2040_sio.spinlock[0],		0xd0000100, "rp2040_sio.spinlock[0]");
+	nfail += test_address(&rp2040_sio.spinlock[1],		0xd0000104, "rp2040_sio.spinlock[1]");
+	nfail += test_address(&rp2040_sio.spinlock[31],		0xd000017c, "rp2040_sio.spinlock[31]");
 	return nfail;
 }
 

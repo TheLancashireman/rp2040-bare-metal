@@ -21,8 +21,12 @@
 #define RP2040_H		1
 
 #include "rp2040-types.h"
+#include "rp2040.h"
 
-/* Peripherals have "mirror" addresses that allow atomic access
+/* Most peripherals have "mirror" addresses that allow atomic access.
+ * Exceptions:
+ *	I2C, UART, SPI and SSI use the same mirror address scheme but have a "bus interposer" that adds two cycles.
+ *	SIO doesn't have mirror addresses. It has separate atomic access for some registers
 */
 #define	RP2040_OFFSET_REG	0x0000		/* Plain register (i.e. read/write all bits) */
 #define	RP2040_OFFSET_XOR	0x1000		/* XOR (i.e. toggle) */

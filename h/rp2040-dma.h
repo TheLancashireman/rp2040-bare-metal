@@ -21,6 +21,7 @@
 #define RP2040_DMA_H	1
 
 #include "rp2040-types.h"
+#include "rp2040.h"
 
 typedef struct rp2040_dma_s rp2040_dma_t;
 typedef struct rp2040_dmac_s rp2040_dmac_t;

@@ -20,6 +20,7 @@
 #ifndef RP2040_RESETS_H
 #define RP2040_RESETS_H		1
 
+#include "rp2040-types.h"
 #include "rp2040.h"
 
 /* The resets registers control the power to the peripherals.
@@ -74,18 +75,18 @@ struct rp2040_resets_s
 */
 static inline void rp2040_release(u32_t peri)
 {
-	dv_rp2040_resets_w1c.reset = peri;
-   	do {    /* Wait */  } while ( (dv_rp2040_resets.done & peri) == 0 );
+	rp2040_resets_w1c.reset = peri;
+   	do {    /* Wait */  } while ( (rp2040_resets.done & peri) == 0 );
 }
 
-/* dv_rp2040_reset() - reset a peripheral
+/* rp2040_reset() - reset a peripheral
  *
  * The parameter must specify exactly one peripheral
 */
-static inline void dv_rp2040_reset(dv_u32_t peri)
+static inline void rp2040_reset(u32_t peri)
 {
-	dv_rp2040_resets_w1s.reset = peri;				/* Put the peripheral into reset */
-	dv_rp2040_release(peri);						/* Bring it back out again */
+	rp2040_resets_w1s.reset = peri;				/* Put the peripheral into reset */
+	rp2040_release(peri);						/* Bring it back out again */
 }
 
 #endif
