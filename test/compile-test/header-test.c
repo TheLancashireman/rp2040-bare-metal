@@ -2,20 +2,20 @@
  *
  * (c) David Haworth
  *
- *  This file is part of pico-bare-metal.
+ *  This file is part of rp2040-bare-metal.
  *
- *  pico-bare-metal is free software: you can redistribute it and/or modify
+ *  rp2040-bare-metal is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  pico-bare-metal is distributed in the hope that it will be useful,
+ *  rp2040-bare-metal is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with pico-bare-metal.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with rp2040-bare-metal.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /* Intended to be compiled on the host system (gcc).
@@ -46,6 +46,7 @@ typedef volatile u64_t reg64_t;
 #include "rp2040-adc.h"
 #include "rp2040-clocks.h"
 #include "rp2040-dma.h"
+#include "rp2040-gpio.h"
 #include "rp2040-pio.h"
 #include "rp2040-resets.h"
 #include "rp2040-sio.h"
@@ -54,6 +55,7 @@ static int test_sysinfo(void);
 static int test_adc(void);
 static int test_clocks(void);
 static int test_dma(void);
+static int test_gpio(void);
 static int test_pio(void);
 static int test_resets(void);
 static int test_sio(void);
@@ -67,6 +69,7 @@ int main(int argc, char **argv)
 	nfail += test_adc();
 	nfail += test_clocks();
 	nfail += test_dma();
+	nfail += test_gpio();
 	nfail += test_pio();
 	nfail += test_resets();
 	nfail += test_sio();
@@ -324,6 +327,61 @@ static int test_clocks(void)
 	nfail += test_address(&rp2040_usbpll.pwr,				0x4002c004, "rp2040_usbpll.pwr");
 	nfail += test_address(&rp2040_usbpll.fbdiv_int,			0x4002c008, "rp2040_usbpll.fbdiv_int");
 	nfail += test_address(&rp2040_usbpll.prim,				0x4002c00c, "rp2040_usbpll.prim");
+	return nfail;
+}
+
+static int test_gpio(void)
+{
+	int nfail = 0;
+	nfail += test_address(&rp2040_iobank0.gpio[0].status,	0x40014000, "iobank0.gpio[0].status");
+	nfail += test_address(&rp2040_iobank0.gpio[0].ctrl,		0x40014004, "iobank0.gpio[0].ctrl");
+	nfail += test_address(&rp2040_iobank0.gpio[1].status,	0x40014008, "iobank0.gpio[1].status");
+	nfail += test_address(&rp2040_iobank0.gpio[1].ctrl,		0x4001400c, "iobank0.gpio[1].ctrl");
+	nfail += test_address(&rp2040_iobank0.gpio[29].status,	0x400140e8, "iobank0.gpio[29].status");
+	nfail += test_address(&rp2040_iobank0.gpio[29].ctrl,	0x400140ec, "iobank0.gpio[29].ctrl");
+	nfail += test_address(&rp2040_iobank0.intr[0],			0x400140f0, "iobank0.intr[0]");
+	nfail += test_address(&rp2040_iobank0.intr[1],			0x400140f4, "iobank0.intr[1]");
+	nfail += test_address(&rp2040_iobank0.intr[2],			0x400140f8, "iobank0.intr[2]");
+	nfail += test_address(&rp2040_iobank0.intr[3],			0x400140fc, "iobank0.intr[3]");
+
+	nfail += test_address(&rp2040_iobank0.proc_intctl[0].inte[0],	0x40014100, "iobank0.proc_intctl[0].inte[0]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[0].inte[1],	0x40014104, "iobank0.proc_intctl[0].inte[1]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[0].inte[2],	0x40014108, "iobank0.proc_intctl[0].inte[2]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[0].inte[3],	0x4001410c, "iobank0.proc_intctl[0].inte[3]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[0].intf[0],	0x40014110, "iobank0.proc_intctl[0].intf[0]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[0].intf[1],	0x40014114, "iobank0.proc_intctl[0].intf[1]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[0].intf[2],	0x40014118, "iobank0.proc_intctl[0].intf[2]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[0].intf[3],	0x4001411c, "iobank0.proc_intctl[0].intf[3]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[0].ints[0],	0x40014120, "iobank0.proc_intctl[0].ints[0]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[0].ints[1],	0x40014124, "iobank0.proc_intctl[0].ints[1]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[0].ints[2],	0x40014128, "iobank0.proc_intctl[0].ints[2]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[0].ints[3],	0x4001412c, "iobank0.proc_intctl[0].ints[3]");
+
+	nfail += test_address(&rp2040_iobank0.proc_intctl[1].inte[0],	0x40014130, "iobank0.proc_intctl[1].inte[0]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[1].inte[1],	0x40014134, "iobank0.proc_intctl[1].inte[1]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[1].inte[2],	0x40014138, "iobank0.proc_intctl[1].inte[2]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[1].inte[3],	0x4001413c, "iobank0.proc_intctl[1].inte[3]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[1].intf[0],	0x40014140, "iobank0.proc_intctl[1].intf[0]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[1].intf[1],	0x40014144, "iobank0.proc_intctl[1].intf[1]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[1].intf[2],	0x40014148, "iobank0.proc_intctl[1].intf[2]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[1].intf[3],	0x4001414c, "iobank0.proc_intctl[1].intf[3]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[1].ints[0],	0x40014150, "iobank0.proc_intctl[1].ints[0]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[1].ints[1],	0x40014154, "iobank0.proc_intctl[1].ints[1]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[1].ints[2],	0x40014158, "iobank0.proc_intctl[1].ints[2]");
+	nfail += test_address(&rp2040_iobank0.proc_intctl[1].ints[3],	0x4001415c, "iobank0.proc_intctl[1].ints[3]");
+
+	nfail += test_address(&rp2040_iobank0.dormant_wake.inte[0],		0x40014160, "iobank0.dormant_wake.inte[0]");
+	nfail += test_address(&rp2040_iobank0.dormant_wake.inte[1],		0x40014164, "iobank0.dormant_wake.inte[1]");
+	nfail += test_address(&rp2040_iobank0.dormant_wake.inte[2],		0x40014168, "iobank0.dormant_wake.inte[2]");
+	nfail += test_address(&rp2040_iobank0.dormant_wake.inte[3],		0x4001416c, "iobank0.dormant_wake.inte[3]");
+	nfail += test_address(&rp2040_iobank0.dormant_wake.intf[0],		0x40014170, "iobank0.dormant_wake.intf[0]");
+	nfail += test_address(&rp2040_iobank0.dormant_wake.intf[1],		0x40014174, "iobank0.dormant_wake.intf[1]");
+	nfail += test_address(&rp2040_iobank0.dormant_wake.intf[2],		0x40014178, "iobank0.dormant_wake.intf[2]");
+	nfail += test_address(&rp2040_iobank0.dormant_wake.intf[3],		0x4001417c, "iobank0.dormant_wake.intf[3]");
+	nfail += test_address(&rp2040_iobank0.dormant_wake.ints[0],		0x40014180, "iobank0.dormant_wake.ints[0]");
+	nfail += test_address(&rp2040_iobank0.dormant_wake.ints[1],		0x40014184, "iobank0.dormant_wake.ints[1]");
+	nfail += test_address(&rp2040_iobank0.dormant_wake.ints[2],		0x40014188, "iobank0.dormant_wake.ints[2]");
+	nfail += test_address(&rp2040_iobank0.dormant_wake.ints[3],		0x4001418c, "iobank0.dormant_wake.ints[3]");
 	return nfail;
 }
 
