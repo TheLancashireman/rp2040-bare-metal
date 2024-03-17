@@ -50,6 +50,7 @@ typedef volatile u64_t reg64_t;
 #include "rp2040-pio.h"
 #include "rp2040-resets.h"
 #include "rp2040-sio.h"
+#include "rp2040-timer.h"
 
 static int test_sysinfo(void);
 static int test_adc(void);
@@ -59,6 +60,7 @@ static int test_gpio(void);
 static int test_pio(void);
 static int test_resets(void);
 static int test_sio(void);
+static int test_timer(void);
 static int test_address(volatile void *p, u32_t v, char *name);
 
 int main(int argc, char **argv)
@@ -73,6 +75,7 @@ int main(int argc, char **argv)
 	nfail += test_pio();
 	nfail += test_resets();
 	nfail += test_sio();
+	nfail += test_timer();
 
 	if ( nfail == 0 )
 		printf("Pass\n");
@@ -382,6 +385,29 @@ static int test_gpio(void)
 	nfail += test_address(&rp2040_iobank0.dormant_wake.ints[1],		0x40014184, "iobank0.dormant_wake.ints[1]");
 	nfail += test_address(&rp2040_iobank0.dormant_wake.ints[2],		0x40014188, "iobank0.dormant_wake.ints[2]");
 	nfail += test_address(&rp2040_iobank0.dormant_wake.ints[3],		0x4001418c, "iobank0.dormant_wake.ints[3]");
+	return nfail;
+}
+
+static int test_timer(void)
+{
+	int nfail = 0;
+	nfail += test_address(&rp2040_timer.time_hw,		0x40054000, "rp2040_timer.time_hw");
+	nfail += test_address(&rp2040_timer.time_lw,		0x40054004, "rp2040_timer.time_lw");
+	nfail += test_address(&rp2040_timer.time_hr,		0x40054008, "rp2040_timer.time_hr");
+	nfail += test_address(&rp2040_timer.time_lr,		0x4005400c, "rp2040_timer.time_lr");
+	nfail += test_address(&rp2040_timer.alarm[0],		0x40054010, "rp2040_timer.alarm[0]");
+	nfail += test_address(&rp2040_timer.alarm[1],		0x40054014, "rp2040_timer.alarm[1]");
+	nfail += test_address(&rp2040_timer.alarm[2],		0x40054018, "rp2040_timer.alarm[2]");
+	nfail += test_address(&rp2040_timer.alarm[3],		0x4005401c, "rp2040_timer.alarm[3]");
+	nfail += test_address(&rp2040_timer.armed,			0x40054020, "rp2040_timer.armed");
+	nfail += test_address(&rp2040_timer.time_hraw,		0x40054024, "rp2040_timer.time_hraw");
+	nfail += test_address(&rp2040_timer.time_lraw,		0x40054028, "rp2040_timer.time_lraw");
+	nfail += test_address(&rp2040_timer.dbgpause,		0x4005402c, "rp2040_timer.dbgpause");
+	nfail += test_address(&rp2040_timer.pause,			0x40054030, "rp2040_timer.dbgpause");
+	nfail += test_address(&rp2040_timer.intcs.intr,		0x40054034, "rp2040_timer.intcs.intr");
+	nfail += test_address(&rp2040_timer.intcs.inte,		0x40054038, "rp2040_timer.intcs.inte");
+	nfail += test_address(&rp2040_timer.intcs.intf,		0x4005403c, "rp2040_timer.intcs.intf");
+	nfail += test_address(&rp2040_timer.intcs.ints,		0x40054040, "rp2040_timer.intcs.ints");
 	return nfail;
 }
 
