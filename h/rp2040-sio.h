@@ -21,7 +21,6 @@
 #define RP2040_SIO_H	1
 
 #include "rp2040-types.h"
-#include "rp2040.h"
 
 /* RP2040 SIO - single-cycle I/O block
  *
@@ -85,7 +84,7 @@ typedef struct rp2040_sio_s
 	reg32_t spinlock[32];			/* 0x100 - spinlocks */
 } rp2040_sio_t;
 
-/* SIO doesn't have mirror addresses for atomic access
+/* SIO doesn't have mirror blocks for atomic access
 */
 #define SIO_BASE			0xd0000000
 #define rp2040_sio			(((rp2040_sio_t *)SIO_BASE)[0])
