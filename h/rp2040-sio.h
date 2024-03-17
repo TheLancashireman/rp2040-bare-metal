@@ -89,5 +89,26 @@ typedef struct rp2040_sio_s
 #define SIO_BASE			0xd0000000
 #define rp2040_sio			(((rp2040_sio_t *)SIO_BASE)[0])
 
+/* rp2040_pin_init() - initialise a GPIO pin for input or output
+*/
+static inline void rp2040_pin_init(int pin, boolean_t output)
+{
+	u32_t pinmask = 0x1 << pin;
+
+	/* Disable the SIO output and turn off.
+	*/
+	rp2040_sio.gpio_oe.w1c = pinmask;
+	rp2040_sio.gpio_out.w1c = pinmask;
+
+	/* Select SIO function for the pin.
+	*/
+	rp2040_iobank0.gpio[pin].ctrl = FUNCSEL_SIO;
+
+	if ( output )
+	{
+		rp2040_sio.gpio_oe.w1s = pinmask;
+	}
+}
+
 #endif
 

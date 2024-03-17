@@ -42,6 +42,13 @@ typedef volatile u16_t reg16_t;
 typedef volatile u32_t reg32_t;
 typedef volatile u64_t reg64_t;
 
+enum boolean_e
+{
+	false = 0,
+    true = 1
+};
+typedef enum boolean_e boolean_t;
+
 #include "rp2040.h"
 #include "rp2040-adc.h"
 #include "rp2040-clocks.h"
