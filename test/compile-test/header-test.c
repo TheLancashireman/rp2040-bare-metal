@@ -59,6 +59,7 @@ typedef enum boolean_e boolean_t;
 #include "rp2040-sio.h"
 #include "rp2040-timer.h"
 #include "rp2040-uart.h"
+#include "rp2040-cm0.h"
 
 static int test_sysinfo(void);
 static int test_adc(void);
@@ -70,6 +71,7 @@ static int test_resets(void);
 static int test_sio(void);
 static int test_timer(void);
 static int test_uart(void);
+static int test_cm0(void);
 static int test_address(volatile void *p, u32_t v, char *name);
 
 int main(int argc, char **argv)
@@ -86,6 +88,7 @@ int main(int argc, char **argv)
 	nfail += test_sio();
 	nfail += test_timer();
 	nfail += test_uart();
+	nfail += test_cm0();
 
 	if ( nfail == 0 )
 		printf("Pass\n");
@@ -471,6 +474,26 @@ static int test_uart(void)
 	nfail += test_address(&rp2040_uart1.cellid[1],		0x40038ff4, "rp2040_uart1.cellid[1]");
 	nfail += test_address(&rp2040_uart1.cellid[2],		0x40038ff8, "rp2040_uart1.cellid[2]");
 	nfail += test_address(&rp2040_uart1.cellid[3],		0x40038ffc, "rp2040_uart1.cellid[3]");
+	return nfail;
+}
+
+static int test_cm0(void)
+{
+	int nfail = 0;
+	nfail += test_address(&cxm_acr.actlr,				0xe000e008, "cxm_acr.actlr");
+
+	nfail += test_address(&cxm_systick.stcsr,			0xe000e010, "cxm_systick.stcsr");
+	nfail += test_address(&cxm_systick.strvr,			0xe000e014, "cxm_systick.strvr");
+	nfail += test_address(&cxm_systick.stcvr,			0xe000e018, "cxm_systick.stcvr");
+	nfail += test_address(&cxm_systick.stcr,			0xe000e01c, "cxm_systick.stcr");
+
+	nfail += test_address(&cxm_scr.cpuid,				0xe000ed00, "cxm_scr.cpuid");
+	nfail += test_address(&cxm_scr.icsr,				0xe000ed04, "cxm_scr.icsr");
+	nfail += test_address(&cxm_scr.vtor,				0xe000ed08, "cxm_scr.vtor");
+	nfail += test_address(&cxm_scr.aircr,				0xe000ed0c, "cxm_scr.aircr");
+	nfail += test_address(&cxm_scr.ccr,					0xe000ed14, "cxm_scr.ccr");
+	nfail += test_address(&cxm_scr.shcsr,				0xe000ed24, "cxm_scr.shcsr");
+	nfail += test_address(&cxm_scr.dfsr,				0xe000ed30, "cxm_scr.dfsr");
 	return nfail;
 }
 

@@ -116,14 +116,14 @@ struct rp2040_uart_s
 #define UART_CTSMIM		0x002		/* CTS */
 #define UART_RIMIM		0x001		/* RI */
 
-/* uart0_isrx() - returns true if there's a character to read.
+/* rp2040_uart_isrx() - returns true if there's a character to read.
 */
 static inline int rp2040_uart_isrx(rp2040_uart_t *uart)
 {
 	return ( (uart->fr & UART_RXFE) == 0 );
 }
 
-/* uart0_istx() - returns true if there's room to send a character
+/* rp2040_uart_istx() - returns true if there's room to send a character
 */
 static inline int rp2040_uart_istx(rp2040_uart_t *uart)
 {

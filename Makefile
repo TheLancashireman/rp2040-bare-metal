@@ -41,6 +41,7 @@ compile-test:	build build/rp2040-bare-metal.a
 
 OBJS	+=	build/rp2040-boot.o
 OBJS	+=	build/rp2040-clocks.o
+OBJS	+=	build/rp2040-uart.o
 
 VPATH	+=	s
 VPATH	+=	c
@@ -55,7 +56,8 @@ build/header-test:	test/compile-test/header-test.c
 
 # rp2040-bare-metal.a target just compiles all the source files
 build/rp2040-bare-metal.a:	$(OBJS)
-	/usr/bin/arm-none-eabi-ar crus build/rp2040-bare-metal.a $(OBJS)
+	-rm build/rp2040-bare-metal.a
+	/usr/bin/arm-none-eabi-ar crs build/rp2040-bare-metal.a $(OBJS)
 
 build/%.o:	%.c
 	/usr/bin/arm-none-eabi-gcc $(CC_OPT) -o $@ -c $<
