@@ -20,8 +20,46 @@
 #  You should have received a copy of the GNU General Public License
 #  along with rp2040-bare-metal.  If not, see <http://www.gnu.org/licenses/>.
 
-test:	build/header-test
 
+# Description of targets:
+#	test:			runs header-test and compile-test
+#	header-test:	builds and runs a host-based program to check the structure offsets in the header files
+#	compile-test:	compiles source files from the c and s directories and creates a library
+# Note: none of the above builds anything that runs on an RP2040 target board.
+
+.PHONY:			test header-test compile-test
+
+test:			build header-test compile-test
+
+build:
+	mkdir -p build
+
+header-test:	build build/header-test
+	build/header-test
+
+compile-test:	build build/rp2040-bare-metal.a
+
+OBJS	+=	build/rp2040-boot.o
+OBJS	+=	build/rp2040-clocks.o
+
+VPATH	+=	s
+VPATH	+=	c
+
+CC_OPT	+=	-mcpu=cortex-m0plus
+CC_OPT	+=	-mthumb
+CC_OPT	+=	-I h
+
+# header-test runs on the host
 build/header-test:	test/compile-test/header-test.c
 	gcc -I h/ -o build/header-test test/compile-test/header-test.c
-	build/header-test
+
+# rp2040-bare-metal.a target just compiles all the source files
+build/rp2040-bare-metal.a:	$(OBJS)
+	/usr/bin/arm-none-eabi-ar crus build/rp2040-bare-metal.a $(OBJS)
+
+build/%.o:	%.c
+	/usr/bin/arm-none-eabi-gcc $(CC_OPT) -o $@ -c $<
+	
+build/%.o:	%.S
+	/usr/bin/arm-none-eabi-gcc $(CC_OPT) -o $@ -c $<
+
