@@ -76,7 +76,7 @@ struct cxm_scr_s
 	reg32_t aircr;		/* ed0c - Application interrupt and reset control */
 	reg32_t not6m_1;	/* ed10 - System control - not v6m */
 	reg32_t ccr;		/* ed14 - Configuration and control */
-	reg32_t not6m_2[3];	/* ed18 - System handler priority - element 0 (shpr1) not v6m */
+	reg32_t shpr[3];	/* ed18 - System handler priority - element 0 (shpr1) not v6m */
 	reg32_t shcsr;		/* ed24 - System handler control and state */
 	reg32_t not6m_3;	/* ed28 - Configurable fault status - not v6m */
 	reg32_t not6m_4;	/* ed2c - Hardfault status - not v6m */

@@ -40,6 +40,7 @@ header-test:	build build/header-test
 compile-test:	build build/rp2040-bare-metal.a
 
 OBJS	+=	build/rp2040-boot.o
+OBJS	+=	build/rp2040-startup.o
 OBJS	+=	build/rp2040-clocks.o
 OBJS	+=	build/rp2040-uart.o
 
@@ -56,7 +57,7 @@ build/header-test:	test/compile-test/header-test.c
 
 # rp2040-bare-metal.a target just compiles all the source files
 build/rp2040-bare-metal.a:	$(OBJS)
-	-rm build/rp2040-bare-metal.a
+	if [ -e build/rp2040-bare-metal.a ]; then rm build/rp2040-bare-metal.a; fi
 	/usr/bin/arm-none-eabi-ar crs build/rp2040-bare-metal.a $(OBJS)
 
 build/%.o:	%.c
