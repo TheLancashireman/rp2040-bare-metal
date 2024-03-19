@@ -39,7 +39,9 @@ header-test:	build build/header-test
 
 compile-test:	build build/rp2040-bare-metal.a
 
+OBJS	+=	build/rp2040-vectors.o
 OBJS	+=	build/rp2040-boot.o
+OBJS	+=	build/rp2040-ctxsw.o
 OBJS	+=	build/rp2040-startup.o
 OBJS	+=	build/rp2040-clocks.o
 OBJS	+=	build/rp2040-uart.o

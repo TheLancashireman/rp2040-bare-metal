@@ -21,7 +21,6 @@
 #include "rp2040-types.h"
 #include "rp2040-clocks.h"
 #include "rp2040-resets.h"
-#include "rp2040-uart.h"
 #include "rp2040-gpio.h"
 #include "rp2040-timer.h"
 #include "rp2040-cm0.h"
@@ -29,19 +28,17 @@
 #define SPSEL		0x02
 
 extern unsigned start_data, end_data, start_bss, end_bss, idata;
-extern unsigned pstacktop;
-extern unsigned stacktop;
-
+extern unsigned rp2040_pstacktop;
+extern unsigned rp2040_stacktop;
 extern int main(void);
-extern void switchToPsp(unsigned *psp, unsigned *msp, unsigned control, int (*fp)(void));
 
 /* init_vars() - initialise variables
  *
  * Initialises all variables from the flash image (.data) or to zero (.bss)
 */
-void init_vars(void)
+static void init_vars(void)
 {
-#if 0	/* Using direct load-toRAM, .data variables are initialised by the loader */
+#if 0	/* Using direct load-to-RAM, .data variables are initialised by the loader */
 	unsigned *s = &idata;
 	unsigned *d = &start_data;
 
@@ -71,6 +68,7 @@ void rp2040_kickstart(void)
 #endif
 
 	/* Initialise the the XOSC clock, the PLL (133MHz) and the USB PLL (48MHz)
+	 * The USB PLL is also needed for ADC
 	*/
 	rp2040_clock_init();
 	rp2040_pll_init();
@@ -90,17 +88,6 @@ void rp2040_kickstart(void)
 	*/
 	rp2040_release(RESETS_io_bank0);
 
-	/* Initialise uart0
-	*/
-	(void)rp2040_uart_init(&rp2040_uart0, 115200, "8N1");
-
-	/* Set up the I/O function for UART0
-     * GPIO 0 = UART0 tx
-     * GPIO 1 = UART0 rx
-    */
-    rp2040_iobank0.gpio[0].ctrl = FUNCSEL_UART;
-    rp2040_iobank0.gpio[1].ctrl = FUNCSEL_UART;
-
 	/* Release the timer from reset
 	*/
 	rp2040_release(RESETS_timer);
@@ -108,10 +95,11 @@ void rp2040_kickstart(void)
 	/* Initialise the interrupt controller
 	*/
 #if 0
-	nvic_init();
+	rp2040_nvic_init();
 #endif
 
 	/* Switch to the process stack pointer and simultaneously jump to main()
 	*/
-	switchToPsp(&pstacktop, &stacktop, (cxm_get_control() | SPSEL), &main);
+	rp2040_switch_to_psp((u32_t)&rp2040_pstacktop, (u32_t)&rp2040_stacktop,
+						(u32_t)(cxm_get_control() | SPSEL), (u32_t)&main);
 }

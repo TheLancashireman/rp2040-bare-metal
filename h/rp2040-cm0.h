@@ -235,4 +235,6 @@ static inline intstatus_t restore(intstatus_t x)
 	return old;
 }
 
+extern void rp2040_switch_to_psp(u32_t psp, u32_t msp, u32_t control, u32_t fp);
+
 #endif
