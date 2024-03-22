@@ -41,13 +41,13 @@ void rp2040_clock_init(void)
 {
 	rp2040_clocks.sys_resus_ctrl = 0x00;				/* Disable resuscitation for now */
 
-	rp2040_xosc.ctrl = XOSC_1_15_MHZ;			/* Should be fixed according to datasheet, but is R/W */
+	rp2040_xosc.ctrl = XOSC_1_15_MHZ | XOSC_DISABLE;	/* Should be fixed according to datasheet, but is R/W */
 	rp2040_xosc.startup = ((12000000/1000)+255)/256;	/* 1 ms at 12 MHz, rounded up */
-	rp2040_xosc_w1s.ctrl = XOSC_ENABLE;
+	rp2040_xosc.ctrl = XOSC_1_15_MHZ | XOSC_ENABLE;
 	do {	/* Wait */	} while ( (rp2040_xosc.status & XOSC_STABLE) == 0 );
 
-	rp2040_clocks.ref.ctrl = CLKSRC_REF_XOSC;	/* Select XOSC as the reference clock source */
-	rp2040_clocks.sys.ctrl = CLKSRC_SYS_REF;		/* Select REF as the system clock source */
+	rp2040_clocks.ref.ctrl = CLKSRC_REF_XOSC;			/* Select XOSC as the reference clock source */
+	rp2040_clocks.sys.ctrl = CLKSRC_SYS_REF;			/* Select REF as the system clock source */
 
 	rp2040_clocks.peri.ctrl = CLK_ENABLE | CLKSRC_PERI_XOSC;		/* Select xosc as peripheral clock */
 }

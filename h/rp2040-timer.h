@@ -62,7 +62,7 @@ u64_t rp2040_read_time(void)
 	do {
 		h1 = rp2040_timer.time_hraw;
 		l  = rp2040_timer.time_lraw;
-		h1 = rp2040_timer.time_hraw;
+		h2 = rp2040_timer.time_hraw;
 	} while ( h1 != h2 );
 
 	return (((u64_t)h1) << 32) + ((u64_t)l);

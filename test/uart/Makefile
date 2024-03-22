@@ -17,9 +17,9 @@
 #  You should have received a copy of the GNU General Public License
 #  along with rp2040-bare-metal.  If not, see <http://www.gnu.org/licenses/>.
 
-.PHONY:		default
+.PHONY:		default upload
 
-default:	build build/uart-test.elf
+default:	build/uart-test.uf2
 
 OBJS	+=	build/rp2040-vectors.o
 OBJS	+=	build/rp2040-boot.o
@@ -28,23 +28,26 @@ OBJS	+=	build/rp2040-startup.o
 OBJS	+=	build/rp2040-clocks.o
 OBJS	+=	build/rp2040-uart.o
 OBJS	+=	build/uart-test.o
+OBJS	+=	build/test-io.o
 
 VPATH 	+= 	.
 VPATH 	+= 	../../c
 VPATH	+=	../../s
+VPATH	+=	../common
 
 LDSCRIPT	=	../../ld/rp2040-ram.ldscript
-
-build:
-	mkdir build
 
 CC_OPT	+=	-mcpu=cortex-m0plus
 CC_OPT	+=	-mthumb
 CC_OPT	+=	-I ../../h
+CC_OPT	+=	-I ../common
+CC_OPT	+=	-Wall
 
-# rp2040-bare-metal.a target just compiles all the source files
-build/uart-test.elf:	$(OBJS)
-	/usr/bin/arm-none-eabi-ld -o $@ $(OBJS) -T $(LDSCRIPT)
+build/uart-test.uf2:	build/uart-test.elf
+	elf2uf2 -v $< $@
+
+build/uart-test.elf:	build $(OBJS) $(LDSCRIPT)
+	/usr/bin/arm-none-eabi-ld -o $@ $(OBJS) -T $(LDSCRIPT) -e 'rp2040_entry'
 
 build/%.o:	%.c
 	/usr/bin/arm-none-eabi-gcc $(CC_OPT) -o $@ -c $<
@@ -52,3 +55,8 @@ build/%.o:	%.c
 build/%.o:	%.S
 	/usr/bin/arm-none-eabi-gcc $(CC_OPT) -o $@ -c $<
 
+build:
+	mkdir build
+
+upload:		build/uart-test.uf2
+	../../sh/to-pico.sh $<
