@@ -5,6 +5,14 @@ This is a collection of bits for constructing RP2040 applications without the pi
 The aim is for the memory footprint to be as small as possible, by letting the compiler
 and linker do a lot of the work.
 
+## Caveat
+
+The testing uses the on-board UF2 loader to load directly into RAM and run from there.
+Because of that, the test programs might not initialise everything that should be initialised
+for the code to run correctly. One example is the watchdog - it seems that the tick generator
+is initialised to divide the reference clock (XOSC) by 12. From a cold boot, it is likely 
+that the startup code will need to do that. See rp2040-watchdog.h
+
 ## License, disclaimer etc.
 
 Copyright David Haworth
