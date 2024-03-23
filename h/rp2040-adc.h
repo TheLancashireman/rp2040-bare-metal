@@ -53,6 +53,17 @@ struct rp2040_adc_s
 #define ADC_TS_EN		0x00000002	/* Temperature sensor enabled */
 #define ADC_EN			0x00000001	/* ADC enabled */
 
+#define ADC_RR_0		0x00010000
+#define ADC_RR_1		0x00020000
+#define ADC_RR_2		0x00040000
+#define ADC_RR_3		0x00080000
+#define ADC_RR_TEMP		0x00100000
+#define ADC_SEL_0		0x00000000
+#define ADC_SEL_1		0x00001000
+#define ADC_SEL_2		0x00002000
+#define ADC_SEL_3		0x00003000
+#define ADC_SEL_TEMP	0x00004000
+
 /* RESULT and FIFO registers
 */
 #define ADC_FIFO_ERR	0x00008000	/* Conversion error (FIFO only) */
