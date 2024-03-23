@@ -59,6 +59,7 @@ typedef enum boolean_e boolean_t;
 #include "rp2040-sio.h"
 #include "rp2040-timer.h"
 #include "rp2040-uart.h"
+#include "rp2040-watchdog.h"
 #include "rp2040-cm0.h"
 
 static int test_sysinfo(void);
@@ -71,6 +72,7 @@ static int test_resets(void);
 static int test_sio(void);
 static int test_timer(void);
 static int test_uart(void);
+static int test_watchdog(void);
 static int test_cm0(void);
 static int test_address(volatile void *p, u32_t v, char *name);
 
@@ -88,6 +90,7 @@ int main(int argc, char **argv)
 	nfail += test_sio();
 	nfail += test_timer();
 	nfail += test_uart();
+	nfail += test_watchdog();
 	nfail += test_cm0();
 
 	if ( nfail == 0 )
@@ -494,6 +497,18 @@ static int test_cm0(void)
 	nfail += test_address(&cxm_scr.ccr,					0xe000ed14, "cxm_scr.ccr");
 	nfail += test_address(&cxm_scr.shcsr,				0xe000ed24, "cxm_scr.shcsr");
 	nfail += test_address(&cxm_scr.dfsr,				0xe000ed30, "cxm_scr.dfsr");
+	return nfail;
+}
+
+static int test_watchdog(void)
+{
+	int nfail = 0;
+	nfail += test_address(&rp2040_watchdog.ctrl,		0x40058000, "rp2040_watchdog.ctrl");
+	nfail += test_address(&rp2040_watchdog.load,		0x40058004, "rp2040_watchdog.load");
+	nfail += test_address(&rp2040_watchdog.reason,		0x40058008, "rp2040_watchdog.reason");
+	nfail += test_address(&rp2040_watchdog.scratch[0],	0x4005800c, "rp2040_watchdog.scratch0");
+	nfail += test_address(&rp2040_watchdog.scratch[1],	0x40058010, "rp2040_watchdog.scratch1");
+	nfail += test_address(&rp2040_watchdog.tick,		0x4005802c, "rp2040_watchdog.tick");
 	return nfail;
 }
 
