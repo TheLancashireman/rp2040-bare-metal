@@ -44,4 +44,26 @@ struct rp2040_watchdog_s
 #define rp2040_watchdog_w1s	(((rp2040_watchdog_t *)(WATCHDOG_BASE+RP2040_OFFSET_W1S))[0])
 #define rp2040_watchdog_w1c	(((rp2040_watchdog_t *)(WATCHDOG_BASE+RP2040_OFFSET_W1C))[0])
 
+#define TICK_COUNT			0x000ff800
+#define TICK_RUNNING		0x00000400
+#define TICK_ENABLED		0x00000200
+#define TICK_DIV			0x000001ff
+
+#define WATCHDOG_TRIGGER	0x80000000
+#define WATCHDOG_ENABLED	0x40000000
+
+static inline void rp2040_watchdog_disable(void)
+{
+	/* Clear the ENABLED bit
+	*/
+	rp2040_watchdog_w1c.ctrl = WATCHDOG_ENABLED;
+}
+
+static inline void rp2040_tick_init(void)
+{
+	rp2040_watchdog.tick = 0;					/* Clear out the old stuff */
+	rp2040_watchdog.tick;						/* Read back to force the write */
+	rp2040_watchdog.tick = TICK_ENABLED | 12;	/* Divide by 12 make the timer a "standard" microsecond timer */
+}
+
 #endif
