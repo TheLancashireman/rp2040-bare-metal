@@ -27,7 +27,7 @@ OBJS	+=	build/rp2040-ctxsw.o
 OBJS	+=	build/rp2040-startup.o
 OBJS	+=	build/rp2040-clocks.o
 OBJS	+=	build/rp2040-uart.o
-OBJS	+=	build/uart-test.o
+OBJS	+=	build/adc-test.o
 OBJS	+=	build/test-io.o
 
 VPATH 	+= 	.
