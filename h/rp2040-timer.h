@@ -55,7 +55,7 @@ struct rp2040_timer_s
  * The time_hr/_lr registers suffer from the usual concurrency issues, so this function
  * uses a standard high-low-high algorithm reading the raw registers.
 */
-u64_t rp2040_read_time(void)
+static inline u64_t rp2040_read_time(void)
 {
 	u32_t h1, h2, l;
 
