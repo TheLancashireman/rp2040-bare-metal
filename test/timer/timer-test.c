@@ -23,11 +23,15 @@
 #include "rp2040-uart.h"
 #include "rp2040-timer.h"
 #include "rp2040-gpio.h"
+#include "rp2040-watchdog.h"
 #include "test-io.h"
 
 /* Expected outcome of this test:
  *
  * Async serial output at 115200-8N1 on GPIO 16
+ *
+ * The test prints 20 lines of 60 asterisks with a delay of one second between asterisks.
+ * Measure how long one line takes - it should be one minute.
 */
 
 int main(void)
@@ -46,6 +50,8 @@ int main(void)
 	dh_putc('\n');
 	dh_puts("Test started ...\n");
 
+	rp2040_watchdog_disable();
+	rp2040_tick_init();
 	rp2040_release(RESETS_timer);
 
 	u64_t next = rp2040_read_time();
