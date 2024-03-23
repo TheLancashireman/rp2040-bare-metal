@@ -75,24 +75,36 @@ struct rp2040_clocks_s
 #define CLKSRC_REF_ROSC		0x00
 #define CLKSRC_REF_AUX		0x01
 #define CLKSRC_REF_XOSC		0x02
+
 #define CLKSRC_SYS_REF		0x00
-#define CLKSRC_SYS_AUX		0x01
+#define CLKSRC_SYS_AUX		0x01	/* When using this, choose AUX source from the following */
 #define CLKSRC_SYS_AUX_PLL	0x00
 #define CLKSRC_SYS_AUX_UPLL	0x20
 #define CLKSRC_SYS_AUX_ROSC	0x40
 #define CLKSRC_SYS_AUX_XOSC	0x60
+
 #define CLKSRC_PERI_SYS		0x00
 #define CLKSRC_PERI_PLL		0x20
 #define CLKSRC_PERI_UPLL	0x40
 #define CLKSRC_PERI_ROSC	0x60
 #define CLKSRC_PERI_XOSC	0x80
-#define CLKSRC_USB_SYS		0x00
+#define CLKSRC_PERI_GPIN0	0xa0
+#define CLKSRC_PERI_GPIN1	0xc0
+
+#define CLKSRC_USB_PLL_USB	0x00
 #define CLKSRC_USB_PLL_SYS	0x20
-#define CLKSRC_USB_PLL_USB	0x40
-#define CLKSRC_USB_ROSC_PH	0x60
-#define CLKSRC_USB_XOSC		0x80
-#define CLKSRC_USB_GPIN0	0xa0
+#define CLKSRC_USB_ROSC_PH	0x40
+#define CLKSRC_USB_XOSC		0x60
+#define CLKSRC_USB_GPIN0	0x80
 #define CLKSRC_USB_GPIN1	0xc0
+
+#define CLKSRC_ADC_PLL_USB	0x00
+#define CLKSRC_ADC_PLL_SYS	0x20
+#define CLKSRC_ADC_ROSC_PH	0x40
+#define CLKSRC_ADC_XOSC		0x60
+#define CLKSRC_ADC_GPIN0	0x80
+#define CLKSRC_ADC_GPIN1	0xa0
+
 
 /* Xosc
 */
