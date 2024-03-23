@@ -21,11 +21,16 @@
 #include "rp2040.h"
 #include "rp2040-uart.h"
 #include "rp2040-gpio.h"
-#include "rp2040-clocks.h"
+#include "test-io.h"
 
-static void dh_putc(char c);
-static void dh_puts(char *str);
-static void delay(void);
+/* Expected outcome of this test:
+ *
+ * Async serial output at 115200-8N1 on GPIO 16
+ * Message "n Test passed" (n = 0..9) repeats approx once per second.
+ *
+ * Also verifies that the peripheral clock is correctly set at 12 MHz
+ * and that the CPU clock is approximately correct at 133 MHz.
+*/
 
 int main(void)
 {
@@ -34,81 +39,25 @@ int main(void)
 	(void)rp2040_uart_init(&rp2040_uart0, 115200, "8N1");
 
 	/* Set up the I/O function for UART0
-	  * GPIO 0 = UART0 tx
-	  * GPIO 1 = UART0 rx
+	  * GPIO 16 = UART0 tx
+	  * GPIO 17 = UART0 rx
 	 */
-	rp2040_iobank0.gpio[0].ctrl = FUNCSEL_UART;
-	rp2040_iobank0.gpio[1].ctrl = FUNCSEL_UART;
+	rp2040_iobank0.gpio[16].ctrl = FUNCSEL_UART;
+	rp2040_iobank0.gpio[17].ctrl = FUNCSEL_UART;
 
+	dh_puts("Test started ...\n");
+	int cc = '0';
 	for (;;)
 	{
-		delay();
-		dh_puts("Test passed\n");
+		soft_delay_1s();
+		dh_putc(cc);
+		dh_puts(" Test passed\n");
+		cc++;
+		if ( cc > '9' )
+		{
+			cc = '0';
+		}
 	}
 
 	return 0;
-}
-
-static void dh_putc(char c)
-{
-	if ( c == '\n' )
-		rp2040_uart_putc(&rp2040_uart0, '\r');
-	rp2040_uart_putc(&rp2040_uart0, c);
-}
-
-static void dh_puts(char *str)
-{
-	while ( *str != '\0' )
-		dh_putc(*str++);
-}
-
-static void delay(void)
-{
-	rp2040_xosc.count = 12000000;
-	while ( rp2040_xosc.count > 0 )
-	{
-		/* Wait */
-	}
-}
-
-void app_nmi(void)
-{
-	dh_puts("NMI\n");
-	for (;;) {}
-}
-
-void app_hardfault(void)
-{
-	dh_puts("HardFault\n");
-	for (;;) {}
-}
-
-void app_svctrap(void)
-{
-	dh_puts("SVC\n");
-	for (;;) {}
-}
-
-void app_pendsvtrap(void)
-{
-	dh_puts("PendSV\n");
-	for (;;) {}
-}
-
-void app_systickirq(void)
-{
-	dh_puts("SysTick\n");
-	for (;;) {}
-}
-
-void app_irq(void)
-{
-	dh_puts("IRQ\n");
-	for (;;) {}
-}
-
-void app_unknowntrap(void)
-{
-	dh_puts("Unknown trap\n");
-	for (;;) {}
 }
