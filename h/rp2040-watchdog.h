@@ -64,6 +64,11 @@ static inline void rp2040_tick_init(void)
 	rp2040_watchdog.tick = 0;					/* Clear out the old stuff */
 	rp2040_watchdog.tick;						/* Read back to force the write */
 	rp2040_watchdog.tick = TICK_ENABLED | 12;	/* Divide by 12 make the timer a "standard" microsecond timer */
+
+	while ( (rp2040_watchdog.tick & TICK_RUNNING) == 0 ) 
+	{
+		/* Wait */
+	}
 }
 
 #endif
