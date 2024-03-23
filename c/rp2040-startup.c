@@ -23,6 +23,7 @@
 #include "rp2040-resets.h"
 #include "rp2040-gpio.h"
 #include "rp2040-timer.h"
+#include "rp2040-watchdog.h"
 #include "rp2040-cm0.h"
 
 #define SPSEL		0x02
@@ -74,6 +75,10 @@ void rp2040_kickstart(void)
 	rp2040_pll_init();
 	rp2040_usbpll_init();
 
+	/* Disable the watchdog
+	*/
+	rp2040_watchdog_disable();
+
 	/* Initialise variables
 	*/
 	init_vars();
@@ -88,8 +93,9 @@ void rp2040_kickstart(void)
 	*/
 	rp2040_release(RESETS_io_bank0);
 
-	/* Release the timer from reset
+	/* Initialise the tick generator and release the timer from reset
 	*/
+	rp2040_tick_init();
 	rp2040_release(RESETS_timer);
 	
 	/* Initialise the interrupt controller

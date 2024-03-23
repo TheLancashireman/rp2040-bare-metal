@@ -23,7 +23,6 @@
 #include "rp2040-uart.h"
 #include "rp2040-timer.h"
 #include "rp2040-gpio.h"
-#include "rp2040-watchdog.h"
 #include "test-io.h"
 
 /* Expected outcome of this test:
@@ -47,12 +46,12 @@ int main(void)
 	rp2040_iobank0.gpio[16].ctrl = FUNCSEL_UART;
 	rp2040_iobank0.gpio[17].ctrl = FUNCSEL_UART;
 
+	/* The tick generator and the timer are started by the rp2040_kickstart().
+	 * Nothing to do here.
+	*/
+
 	dh_putc('\n');
 	dh_puts("Test started ...\n");
-
-	rp2040_watchdog_disable();
-	rp2040_tick_init();
-	rp2040_release(RESETS_timer);
 
 	u64_t next = rp2040_read_time();
 
