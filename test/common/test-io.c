@@ -29,7 +29,7 @@ void dh_putc(char c)
 	rp2040_uart_putc(&rp2040_uart0, c);
 }
 
-void dh_puts(char *str)
+void dh_puts(const char *str)
 {
 	while ( *str != '\0' )
 		dh_putc(*str++);

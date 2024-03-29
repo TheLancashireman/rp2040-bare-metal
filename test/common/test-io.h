@@ -24,7 +24,7 @@
 #include "rp2040.h"
 
 extern void dh_putc(char c);
-extern void dh_puts(char *str);
+extern void dh_puts(const char *str);
 extern void dh_putx32(u32_t v);
 extern void soft_delay_1s(void);
 

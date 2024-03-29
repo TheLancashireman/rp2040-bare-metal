@@ -42,12 +42,7 @@ typedef volatile u16_t reg16_t;
 typedef volatile u32_t reg32_t;
 typedef volatile u64_t reg64_t;
 
-enum boolean_e
-{
-	false = 0,
-    true = 1
-};
-typedef enum boolean_e boolean_t;
+typedef int boolean_t;
 
 #include "rp2040.h"
 #include "rp2040-adc.h"
@@ -74,7 +69,7 @@ static int test_timer(void);
 static int test_uart(void);
 static int test_watchdog(void);
 static int test_cm0(void);
-static int test_address(volatile void *p, u32_t v, char *name);
+static int test_address(volatile void *p, u32_t v, const char *name);
 
 int main(int argc, char **argv)
 {
@@ -524,7 +519,7 @@ static int test_per(void)
 #endif
 
 
-static int test_address(volatile void *p, u32_t v, char *name)
+static int test_address(volatile void *p, u32_t v, const char *name)
 {
 	u32_t addr = (u32_t)(u64_t)p;
 	if ( addr == v )

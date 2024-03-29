@@ -104,7 +104,7 @@ static const br_lookup_t br_table[NBAUD] =
 };
 #endif
 
-int rp2040_uart_init(rp2040_uart_t *uart, unsigned baud, char *fmt)
+int rp2040_uart_init(rp2040_uart_t *uart, unsigned baud, const char *fmt)
 {
 	u32_t rst;
 

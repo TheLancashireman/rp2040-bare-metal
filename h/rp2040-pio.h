@@ -88,4 +88,26 @@ struct rp2040_pio_s
 #define rp2040_pio1_w1s		(((rp2040_pio_t *)(PIO1_BASE+RP2040_OFFSET_W1S))[0])
 #define rp2040_pio1_w1c		(((rp2040_pio_t *)(PIO1_BASE+RP2040_OFFSET_W1C))[0])
 
+/* PIO opcodes encoded in bits 15..13. PUSH and PULL use bit 7 as well.
+ * All instructions have SIDESET/DELAY in bits 12..8.
+ * For the jump instruction, the target address is in the lower 5 bits.
+ * Bits 7..5 contain the condition. Unconditional is encoded as 0.
+ * That's all we'll need for now.
+ * So an unconditional jump instruction is (PIO_JMP | PIO_JMP_ALWAYS | addr)
+ *
+ * To initialise the SM start address, write (PIO_JMP | PIO_JMP_ALWAYS | startaddr) to the instr register.
+*/
+#define PIO_JMP			0x0000
+#define PIO_JMP_ALWAYS	0x0000
+
+#define PIO_WAIT		0x2000
+#define PIO_IN			0x4000
+#define PIO_OUT			0x6000
+#define PIO_PUSH		0x8000
+#define PIO_PULL		0x8080
+#define PIO_MOV			0xa000
+#define PIO_IRQ			0xc000
+#define PIO_SET			0xe000
+
+
 #endif

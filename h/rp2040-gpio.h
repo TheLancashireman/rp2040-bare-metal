@@ -80,4 +80,26 @@ struct rp2040_iobank0_s
 #define FUNCSEL_USB		9
 #define FUNCSEL_NULL	31
 
+/* Override fields in gpio[n].ctrl
+*/
+#define IRQOVER_INT		0x00000000		/* Normal interrupt */
+#define IRQOVER_INVINT	0x10000000		/* Inverted interrupt */
+#define IRQOVER_LOW		0x20000000		/* Drive interrupt low */
+#define IRQOVER_HIGH	0x30000000		/* Drive interrupt high */
+
+#define INOVER_PERI		0x00000000		/* Normal peripheral input */
+#define INOVER_INVPERI	0x00010000		/* Invert the peripheral input */
+#define INOVER_LOW		0x00020000		/* Drive peripheral input low */
+#define INOVER_HIGH		0x00030000		/* Drive peripheral input high */
+
+#define OEOVER_PERI		0x00000000		/* Drive output enable from peripheral signal */
+#define OEOVER_INVPERI	0x00001000		/* Drive output enable from inverted peripheral signal */
+#define OEOVER_DISABLE	0x00002000		/* Disable output */
+#define OEOVER_ENABLE	0x00003000		/* Enable output */
+
+#define OUTOVER_PERI	0x00000000		/* Drive output from peripheral signal */
+#define OUTOVER_INVPERI	0x00000100		/* Drive output from inverse of peripheral signal */
+#define OUTOVER_LOW		0x00000200		/* Drive output low */
+#define OUTOVER_HIGH	0x00000300		/* Drive output high */
+
 #endif

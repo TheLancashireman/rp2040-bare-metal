@@ -132,6 +132,6 @@ static inline int rp2040_uart_istx(rp2040_uart_t *uart)
 
 extern int rp2040_uart_getc(rp2040_uart_t *);
 extern void rp2040_uart_putc(rp2040_uart_t *, int);
-extern int rp2040_uart_init(rp2040_uart_t *, unsigned, char *);
+extern int rp2040_uart_init(rp2040_uart_t *, unsigned, const char *);
 
 #endif
