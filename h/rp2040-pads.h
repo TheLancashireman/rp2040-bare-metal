@@ -51,7 +51,7 @@ struct rp2040_pads_bank0_s
 /* The following apply to gpio[x], swclk and swd
 */
 #define PADS_OD			0x80	/* Output disable (1 to disable) */
-#define PADS_IE			0x40	/* Inut enable */
+#define PADS_IE			0x40	/* Input enable */
 #define PADS_DRIVE		0x30	/* Drive strength */
 #define PADS_DRIVE_2mA	0x00
 #define PADS_DRIVE_4mA	0x10
