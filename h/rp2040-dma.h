@@ -83,4 +83,76 @@ struct rp2040_dma_s
 #define rp2040_dma_w1s			(((rp2040_dma_t *)(DMA_BASE+RP2040_OFFSET_W1S))[0])
 #define rp2040_dma_w1c			(((rp2040_dma_t *)(DMA_BASE+RP2040_OFFSET_W1C))[0])
 
+#define DMA_AHB_ERROR		0x80000000
+#define DMA_READ_ERROR		0x40000000
+#define DMA_WRITE_ERROR		0x20000000
+#define DMA_BUSY			0x01000000
+#define DMA_SNIFF_EN		0x00800000
+#define DMA_BSWAP			0x00400000
+#define DMA_IRQ_QUIET		0x00200000
+#define DMA_TREQ_SEL		0x001f8000
+#define DMA_TREQ_VAL(x)		((x)<<15)
+#define DMA_CHAIN_TO		0x00007800
+#define DMA_CHAIN_VAL(x)	((x)<<11)
+#define DMA_RING_SEL		0x00000400	/* 0 = read address is ring, 1 = write address */
+#define DMA_RING_SIZE		0x000003c0
+#define DMA_RING_VAL(x)		((x)<<6)
+#define DMA_RING_NONE		0
+#define DMA_INCR_WRITE		0x00000020
+#define DMA_INCR_READ		0x00000010
+#define DMA_DATA_SIZE		0x0000000c
+#define DMA_SIZE_BYTE		0x00000000
+#define DMA_SIZE_HALF		0x00000004
+#define DMA_SIZE_WORD		0x00000008
+#define DMA_HIGH_PRIO		0x00000002
+#define DMA_CHANNEL_EN		0x00000001
+
+/* Request IDs for the TREQ_SEL field
+*/
+#define DREQ_PIO0_TX0		0
+#define DREQ_PIO0_TX1		1
+#define DREQ_PIO0_TX2		2
+#define DREQ_PIO0_TX3		3
+#define DREQ_PIO0_RX0		4
+#define DREQ_PIO0_RX1		5
+#define DREQ_PIO0_RX2		6
+#define DREQ_PIO0_RX3		7
+#define DREQ_PIO1_TX0		8
+#define DREQ_PIO1_TX1		9
+#define DREQ_PIO1_TX2		10
+#define DREQ_PIO1_TX3		11
+#define DREQ_PIO1_RX0		12
+#define DREQ_PIO1_RX1		13
+#define DREQ_PIO1_RX2		14
+#define DREQ_PIO1_RX3		15
+#define DREQ_SPI0_TX		16
+#define DREQ_SPI0_RX		17
+#define DREQ_SPI1_TX		18
+#define DREQ_SPI1_RX		19
+#define DREQ_UART0_TX		20
+#define DREQ_UART0_RX		21
+#define DREQ_UART1_TX		22
+#define DREQ_UART1_RX		23
+#define DREQ_PWM_WRAP0		24
+#define DREQ_PWM_WRAP1		25
+#define DREQ_PWM_WRAP2		26
+#define DREQ_PWM_WRAP3		27
+#define DREQ_PWM_WRAP4		28
+#define DREQ_PWM_WRAP5		29
+#define DREQ_PWM_WRAP6		30
+#define DREQ_PWM_WRAP7		31
+#define DREQ_I2C0_TX		32
+#define DREQ_I2C0_RX		33
+#define DREQ_I2C1_TX		34
+#define DREQ_I2C1_RX		35
+#define DREQ_ADC			36
+#define DREQ_XIP_STREAM		37
+#define DREQ_XIP_SSITX		38
+#define DREQ_XIP_SSIRX		39
+#define TREQ_1				0x3b
+#define TREQ_2				0x3c
+#define TREQ_3				0x3d
+#define TREQ_4				0x3e
+#define TREQ_PERM			0x3f
+
 #endif
