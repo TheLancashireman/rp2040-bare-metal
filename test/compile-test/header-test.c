@@ -49,6 +49,7 @@ typedef int boolean_t;
 #include "rp2040-clocks.h"
 #include "rp2040-dma.h"
 #include "rp2040-gpio.h"
+#include "rp2040-pads.h"
 #include "rp2040-pio.h"
 #include "rp2040-resets.h"
 #include "rp2040-sio.h"
@@ -63,6 +64,7 @@ static int test_clocks(void);
 static int test_dma(void);
 static int test_gpio(void);
 static int test_pio(void);
+static int test_pads(void);
 static int test_resets(void);
 static int test_sio(void);
 static int test_timer(void);
@@ -80,6 +82,7 @@ int main(int argc, char **argv)
 	nfail += test_clocks();
 	nfail += test_dma();
 	nfail += test_gpio();
+	nfail += test_pads();
 	nfail += test_pio();
 	nfail += test_resets();
 	nfail += test_sio();
@@ -504,6 +507,17 @@ static int test_watchdog(void)
 	nfail += test_address(&rp2040_watchdog.scratch[0],	0x4005800c, "rp2040_watchdog.scratch0");
 	nfail += test_address(&rp2040_watchdog.scratch[1],	0x40058010, "rp2040_watchdog.scratch1");
 	nfail += test_address(&rp2040_watchdog.tick,		0x4005802c, "rp2040_watchdog.tick");
+	return nfail;
+}
+
+static int test_pads(void)
+{
+	int nfail = 0;
+	nfail += test_address(&rp2040_pads_bank0.voltage,	0x4001c000, "rp2040_pads_bank0.voltage");
+	nfail += test_address(&rp2040_pads_bank0.gpio[0],	0x4001c004, "rp2040_pads_bank0.gpio[0]");
+	nfail += test_address(&rp2040_pads_bank0.gpio[1],	0x4001c008, "rp2040_pads_bank0.gpio[1]");
+	nfail += test_address(&rp2040_pads_bank0.swclk,		0x4001c07c, "rp2040_pads_bank0.swclk");
+	nfail += test_address(&rp2040_pads_bank0.swd,		0x4001c080, "rp2040_pads_bank0.swd");
 	return nfail;
 }
 
