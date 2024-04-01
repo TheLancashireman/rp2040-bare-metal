@@ -32,11 +32,14 @@
 /* Expected outcome of this test:
  *
  * Async serial output at 115200-8N1 on GPIO 16
+ *	- once per second, a print of the average value on ADC1, transferred by alternating ADC channels
  *
  * This test sets up the ADC similar to the ADC test, but
  *	- it uses AIN0 as the analogue input
  *	- it uses DMA to transfer the samples to RAM.
  *	- it prints the average (mean) of the samples and hence checks the divider interface
+ *
+ * Attach a potentiometer between ADC_VREF and AGND and connect the wiper to ADC0
  *
  * Two DMA channels are used.
  * 	- channel 0 transfers 750 samples to a single variable, then triggers channel 1
