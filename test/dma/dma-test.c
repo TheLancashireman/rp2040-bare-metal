@@ -26,23 +26,28 @@
 #include "rp2040-adc.h"
 #include "rp2040-dma.h"
 #include "rp2040-sio.h"
+#include "rp2040-pads.h"
 #include "test-io.h"
 
 /* Expected outcome of this test:
  *
  * Async serial output at 115200-8N1 on GPIO 16
  *
- * This test sets up the ADC just the same as the ADC test, but it uses DMA
- * to transfer the samples to RAM.
+ * This test sets up the ADC similar to the ADC test, but
+ *	- it uses AIN0 as the analogue input
+ *	- it uses DMA to transfer the samples to RAM.
+ *	- it prints the average (mean) of the samples and hence checks the divider interface
  *
  * Two DMA channels are used.
  * 	- channel 0 transfers 750 samples to a single variable, then triggers channel 1
  *	- channel 1 transfers 750 samples to a different variable, then triggers channel 0
+ * It's necessary to reset the write_addr of each channel after the transfer completes
  *
  * The main program
  *	- waits until the current DMA channel is idle
- *	- prints the value of the current channel variable (i.e. the last conversion)
- *	- sets the current channel to an invalid value
+ *	- resets the write_addr of the current channel
+ *	- prints the average value of the current channel variable (i.e. the last set of conversions)
+ *	- sets the current channel's buffer to 0
  *	- switches to the other channel
  *
 */
@@ -65,13 +70,18 @@ int main(void)
 
 	dh_puts("Test started ...\n");
 
+	/* We need to disable the digital I/O on the AIN0 pin (GPIO26)
+	*/
+	rp2040_release(RESETS_pads_bank0);
+	rp2040_pads_bank0.gpio[26] = PADS_OD;	/* *everything* disabled */
+
 	/* Set the ADC clock to the USB PLL (48 MHz)
 	 * Bring out of reset
 	*/
 	rp2040_clocks.adc.ctrl = CLK_ENABLE | CLKSRC_ADC_PLL_USB;
 	rp2040_release(RESETS_adc);
 
-	rp2040_adc.cs = ADC_SEL_TEMP | ADC_ERR_STICKY | ADC_TS_EN | ADC_EN;
+	rp2040_adc.cs = ADC_SEL_0 | ADC_ERR_STICKY | ADC_EN;
 	rp2040_adc.fcs = ADC_OVER | ADC_UNDER | ADC_ERR_EN | ADC_FIFO_EN | ADC_THRESH_VAL(1) | ADC_DREQ_EN;
 	rp2040_adc.div = 64000 << 8;	/* 750 samples per second */
 
