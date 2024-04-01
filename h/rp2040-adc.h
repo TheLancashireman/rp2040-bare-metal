@@ -72,6 +72,7 @@ struct rp2040_adc_s
 /* FCS register
 */
 #define ADC_THRESH		0x0f000000	/* DREQ/IRQ asserted when LEVEL >= THRESH */
+#define ADC_THRESH_VAL(x)	((x)<<24)
 #define ADC_LEVEL		0x000f0000	/* FIFO level - no. of conversions to be read */
 #define ADC_OVER		0x00000800	/* FIFO overflow; sticky, w1c */
 #define ADC_UNDER		0x00000400	/* FIFO underflow; sticky, w1c */
