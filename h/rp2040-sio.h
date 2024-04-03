@@ -21,6 +21,7 @@
 #define RP2040_SIO_H	1
 
 #include "rp2040-types.h"
+#include "rp2040-gpio.h"
 
 /* RP2040 SIO - single-cycle I/O block
  *
@@ -89,6 +90,13 @@ typedef struct rp2040_sio_s
 #define SIO_BASE			0xd0000000
 #define rp2040_sio			(((rp2040_sio_t *)SIO_BASE)[0])
 
+/* FIFO status
+*/
+#define SIO_FIFO_ROE	0x00000008	/* Read while empty (sticky, w1c) */
+#define SIO_FIFO_WOF	0x00000004	/* Write while full (sticky, w1c) */
+#define SIO_FIFO_RDY	0x00000002	/* Tx FIFO is not full */
+#define SIO_FIFO_VLD	0x00000001	/* Rx FIFO is not empty */
+
 /* rp2040_pin_init() - initialise a GPIO pin for input or output
 */
 static inline void rp2040_pin_init(int pin, boolean_t output)
@@ -109,6 +117,8 @@ static inline void rp2040_pin_init(int pin, boolean_t output)
 		rp2040_sio.gpio_oe.w1s = pinmask;
 	}
 }
+
+extern void rp2040_start_core1(void);
 
 #endif
 

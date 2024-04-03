@@ -41,10 +41,13 @@ compile-test:	build build/rp2040-bare-metal.a
 
 OBJS	+=	build/rp2040-vectors.o
 OBJS	+=	build/rp2040-boot.o
+OBJS	+=	build/rp2040-boot1.o
 OBJS	+=	build/rp2040-ctxsw.o
 OBJS	+=	build/rp2040-startup.o
+OBJS	+=	build/rp2040-startup1.o
 OBJS	+=	build/rp2040-clocks.o
 OBJS	+=	build/rp2040-uart.o
+OBJS	+=	build/rp2040-multicore.o
 
 VPATH	+=	s
 VPATH	+=	c
