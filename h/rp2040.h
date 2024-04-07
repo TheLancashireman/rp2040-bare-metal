@@ -21,7 +21,9 @@
 #define RP2040_H		1
 
 #include "rp2040-types.h"
-#include "rp2040.h"
+#ifdef RP2040_CONFIG
+#include RP2040_CONFIG
+#endif
 
 /* Most peripherals have "mirror" addresses that allow atomic access.
  * Exceptions:
