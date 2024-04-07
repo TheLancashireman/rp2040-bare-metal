@@ -48,6 +48,7 @@ OBJS	+=	build/rp2040-startup1.o
 OBJS	+=	build/rp2040-clocks.o
 OBJS	+=	build/rp2040-uart.o
 OBJS	+=	build/rp2040-multicore.o
+OBJS	+=	build/rp2040-vectors.o
 
 VPATH	+=	s
 VPATH	+=	c
