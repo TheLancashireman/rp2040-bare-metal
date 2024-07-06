@@ -210,12 +210,14 @@ const rp2040_vector_t rp2040_hwvectors[16+32] =
 	&APP_IRQ_31,			/* 31 */
 };
 
+#if 0
 void app_unknowntrap(void)
 {
 	for (;;)
 	{
 	}
 }
+#endif
 
 void app_unknown_irq(void)
 {

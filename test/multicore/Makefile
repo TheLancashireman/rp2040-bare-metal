@@ -38,7 +38,7 @@ VPATH 	+= 	../../c
 VPATH	+=	../../s
 VPATH	+=	../common
 
-LDSCRIPT	=	../../ld/rp2040-ram.ldscript
+LDSCRIPT	=	../../ld/rp2040-ram-mc.ldscript
 
 CC_OPT	+=	-mcpu=cortex-m0plus
 CC_OPT	+=	-mthumb
